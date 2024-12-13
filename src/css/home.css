@@ -1,0 +1,34 @@
+#home-title {
+    margin-top: 30vw;
+    font-family: 'GmarketBold';
+    font-size: 12vw;
+    text-align: center;
+    color: #1d3263;
+
+}
+
+#home-date {
+    font-family: 'GmarketMedium';
+    font-size: 4vw;
+    width: 60vw;
+    margin: 0 auto;
+    padding-top: 5vw;
+    color: #464d5c;
+    text-align: center;
+}
+
+
+#home-button {
+    width: 40vw;
+    height: 15vw;
+    line-height: 15vw;
+    margin: 0 auto;
+    font-family: 'GmarketBold';
+    font-size: 6vw;
+    background-color: #5073f2;
+    color: white;
+    text-align: center;
+    margin-top: 10vw;
+    border-radius: 10vw;
+
+}

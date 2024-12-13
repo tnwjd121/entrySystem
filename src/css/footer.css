@@ -1,0 +1,26 @@
+#footer-body{
+    position: fixed;
+    bottom: 0;
+    background-color: #808080;
+    width: 100%;
+    height: 15vw;
+}
+
+#footer-text{
+    font-family: 'GmarketMedium';
+    font-size: 2vw;
+    text-align: center;
+    color: #ececec;
+    height: 15vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+#footer-text ul{
+    list-style: none;
+    padding: 0;
+}
+#footer-text ul li p{
+    margin: 0;
+}

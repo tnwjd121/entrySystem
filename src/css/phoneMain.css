@@ -1,0 +1,71 @@
+#phonemain-body{
+    width: 100%;
+}
+#phonemain-title{
+    font-family: 'PretendardMedium';
+    text-align: center;
+    font-size: 5vw;
+}
+#phonemain-input{
+    padding-top: 5vw;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 40vw;
+}
+#phonemain-input-title{
+    font-family: 'PretendardLight';
+    font-size: 4vw;
+}
+#phonemain-input label{
+    padding: 2vw 0;
+    
+}
+#phonemain-input input{
+    border: none;
+    border-bottom: 1px solid black;
+    font-family: 'PretendardLight';
+}
+#phonemain-input-name input{
+    width: 80vw;
+    font-size: 5vw;
+    padding: 2vw 0;
+}
+#phonemain-input-registNumber-input{
+    display: flex;
+}
+#phonemain-input-registNumber-input input{
+    width: 38vw;
+    font-size: 5vw;
+    padding: 2vw 0;
+}
+#hyphen{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 4vw;
+    font-size: 4vw;
+
+}
+#phonemain-input-phoneNumber-input{
+    display: flex;
+    border-bottom: 1px solid black;
+    width: 80vw;
+}
+#carrier{
+    display: flex;
+    align-items: center;
+    width: 20vw;
+    text-align: center;
+    font-size: 4.5vw;
+    font-family: 'PretendardRegular';
+    padding: 2vw 0;
+}
+#phonemain-input-callnumber input{
+    width: 60vw;
+    font-size: 5vw;
+    border-width: 0;
+    padding: 2vw 0;
+}
