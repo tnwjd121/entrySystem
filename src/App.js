@@ -10,7 +10,7 @@ function App() {
     <Routes>
       <Route path='/ibk/entry/main' element={<Main/>}/>
       <Route path='/ibk/entry/phoneVerification' element={<PhoneVerification/>}/>
-      <Route path='/ibk/entry/Certification' element={<Ceritification/>}/>
+      <Route path='/ibk/entry/certification' element={<Ceritification/>}/>
     </Routes>
   );
 }
