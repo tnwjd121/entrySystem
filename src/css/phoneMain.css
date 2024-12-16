@@ -15,6 +15,18 @@
     justify-content: space-evenly;
     height: 65vw;
 }
+
+#phonemain-input input {
+    border: none;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
+    font-family: 'PretendardLight';
+    outline: none; /* 네모 박스 제거 */
+    background: none; /* 배경 투명화 */
+}
+
+#phonemain-input input:focus {
+    border-bottom: 0.3vw solid blue; /* focus 시 하단 선 파란색 */
+}
 #phonemain-input-title{
     font-family: 'PretendardLight';
     font-size: 4vw;
@@ -143,4 +155,7 @@
     left: 5%;
     bottom: 5%;
 
+}
+#check{
+    color: blue;
 }

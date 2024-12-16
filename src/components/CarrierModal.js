@@ -2,14 +2,9 @@ import React, { useState } from 'react'
 import '../css/carriermodal.css'
 import { GoDash } from "react-icons/go";
 
-export default function CarrierModal() {
+export default function CarrierModal({ onSelectCarrier }) {
 
-  const [selectedCarrier, setSelectedCarrier] = useState("");
-
-  // const handleCarrierSelect = (carrierName) => {
-  //     setSelectedCarrier(carrierName);
-  //     console.log("선택된 통신사:", carrierName); 
-  //   };
+  const carriers = ["SKT", "KT", "LGU+", "SKT 알뜰폰", "KT 알뜰폰", "LGU+ 알뜰폰"];
 
   return (
     <div>
@@ -19,24 +14,14 @@ export default function CarrierModal() {
       <div id='carriermodal-title'>
       <p>통신사를 선택해주세요</p>
       </div>
-      <div id='carriermodal-field' onClick={handleCarrierSelect('SKT')}>
-        <p>SKT</p>
+      {carriers.map((carrier) => (
+      <div 
+      id='carriermodal-field' 
+      key={carrier}
+      onClick={()=>onSelectCarrier(carrier)}>
+        <p>{carrier}</p>
       </div>
-      <div id='carriermodal-field' onClick={handleCarrierSelect('KT')}>
-        <p>KT</p>
-      </div>
-      <div id='carriermodal-field' onClick={handleCarrierSelect('LGU+')}>
-        <p>LGU+</p>
-      </div>
-      <div id='carriermodal-field' onClick={handleCarrierSelect('SKT 알뜰폰')}>
-        <p>SKT 알뜰폰</p>
-      </div>
-      <div id='carriermodal-field' onClick={handleCarrierSelect('KT 알뜰폰')}>
-        <p>KT 알뜰폰</p>
-      </div>
-      <div id='carriermodal-field' onClick={handleCarrierSelect('LGU+ 알뜰폰')}>
-        <p>LGU+ 알뜰폰</p>
-      </div>
+      ))}
     </div>
 
     </div>
