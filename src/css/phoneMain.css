@@ -4,7 +4,7 @@
 #phonemain-title{
     font-family: 'PretendardMedium';
     text-align: center;
-    font-size: 5vw;
+    font-size: 6vw;
 }
 #phonemain-input{
     padding-top: 5vw;
@@ -13,7 +13,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 40vw;
+    height: 65vw;
 }
 #phonemain-input-title{
     font-family: 'PretendardLight';
@@ -25,7 +25,7 @@
 }
 #phonemain-input input{
     border: none;
-    border-bottom: 1px solid black;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
     font-family: 'PretendardLight';
 }
 #phonemain-input-name input{
@@ -36,10 +36,21 @@
 #phonemain-input-registNumber-input{
     display: flex;
 }
-#phonemain-input-registNumber-input input{
+#phonemain-input-registNumber-input p{
+    font-family: 'PretendardLight';
+    width: 20vw;
+    font-size: 4vw;
+}
+#birth{
     width: 38vw;
     font-size: 5vw;
     padding: 2vw 0;
+}
+#gender{
+    width: 8vw;
+    font-size: 5vw;
+    padding: 2vw 0;
+    text-align: center;
 }
 #hyphen{
     display: flex;
@@ -47,13 +58,17 @@
     align-items: center;
     width: 4vw;
     font-size: 4vw;
+    margin-left: 2vw;
+    margin-right: 2vw;
 
 }
 #phonemain-input-phoneNumber-input{
     display: flex;
-    border-bottom: 1px solid black;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
     width: 80vw;
 }
+
+
 #carrier{
     display: flex;
     align-items: center;
@@ -62,10 +77,70 @@
     font-size: 4.5vw;
     font-family: 'PretendardRegular';
     padding: 2vw 0;
+    color: #757575;
 }
 #phonemain-input-callnumber input{
     width: 60vw;
     font-size: 5vw;
     border-width: 0;
     padding: 2vw 0;
+}
+#phonemain-verification{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 3vw;
+    margin-bottom: 10vw;
+}
+#phonemain-verification-total{
+    display: flex;
+    align-items: center;
+    margin-bottom: 2vw;
+}
+#phonemain-verification-total-checkbutton{
+    font-size: 5vw;
+    color: #c0c0c0;
+    padding-right: 1vw;
+}
+#phonemain-verification-total-text{
+    font-family: 'PretendardLight';
+    font-size: 5vw;
+    color: #3b3b3b;
+}
+#phonemain-verification-field{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 2vw;
+}
+#phonemain-verification-field-checkbutton{
+    font-size: 4vw;
+    color: #c0c0c0;
+    padding-right: 1vw;
+}
+#phonemain-verification-field-text{
+    font-family: 'PretendardLight';
+    font-size: 4.5vw;
+    color: #3b3b3b;
+    width: 65vw;
+}
+#phonemain-verification-field-enter{
+    font-size: 4.5vw;
+    color: #868686;
+}
+#phonemain-verification-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #bccae8;
+    font-family: 'PretendardMedium';
+    font-size: 5vw;
+    color: #ffffff;
+    height: 15vw;
+    margin: 0 auto;
+    border-radius: 2vw;
+    position: fixed;
+    width: 90%;
+    left: 5%;
+    bottom: 5%;
+
 }

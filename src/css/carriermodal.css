@@ -1,0 +1,37 @@
+
+#carriermodal-body{
+    margin: 0 auto;
+    position: fixed;
+    bottom: 2%;
+    left: 2%;
+    width: 96%;
+    height: 110vw;
+    background-color: #ffffff;
+    border-radius: 8vw;
+}
+#carriermodal-title p{
+    font-family: 'PretendardMedium';
+    font-size: 6vw;
+    padding-left: 5vw;
+    margin: 3vw 0;
+}
+#carriermodal-field p{
+    font-family: 'PretendardLight';
+    font-size: 5vw;
+    margin: 0;
+    padding:4vw 0 4vw 5vw;
+}
+#dash{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20vw;
+    height: 5vw;
+    color: #e5e7eb;
+    margin-top: 1vw;
+}
+#carriermodal-background{
+    position: fixed;
+    top:0; left: 0; bottom: 0; right: 0;
+    background: rgba(0, 0, 0, 0.2);
+}

@@ -1,0 +1,62 @@
+#certificationmain-body{
+width: 100%;
+
+}
+#certificationmain-title{
+    font-family: 'PretendardMedium';
+    text-align: center;
+    font-size: 6vw;
+
+
+
+}
+#certificationmain-container{
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 12vw;
+}
+#certificationmain-input-title{
+    font-family: 'PretendardLight';
+    font-size: 4vw;
+}
+#certificationmain-input input{
+    border: none;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
+    font-family: 'PretendardLight';
+    font-size: 5vw;
+    padding-top: 1vw;
+    padding-bottom: 1vw;
+    width: 80vw;
+
+}
+
+#certificationmain-re-button{
+    background-color: #f3f4f6;
+    font-family: 'PretendardMedium';
+    font-size: 3.5vw;
+    width: 23vw;
+    margin-top: 5vw;
+    padding: 2vw 2vw;
+    border-radius: 1vw;
+    
+
+}
+
+
+
+#certificationmain-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #bccae8;
+    font-family: 'PretendardMedium';
+    font-size: 5vw;
+    color: #ffffff;
+    height: 15vw;
+    margin: 0 auto;
+    border-radius: 2vw;
+    position: fixed;
+    width: 90%;
+    left: 5%;
+    bottom: 5%;
+}
