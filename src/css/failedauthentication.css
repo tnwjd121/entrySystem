@@ -1,0 +1,42 @@
+#failedauthentication-background{
+    position: fixed;
+    top:0; left: 0; bottom: 0; right: 0;
+    background: rgba(0, 0, 0, 0.2);
+}
+#failedauthentication-body{
+    margin: 0 auto;
+    position: fixed;
+    top: 40%;
+    left: 10%;
+    right: 10%;
+    width: 75vw;
+    height: 32vw;
+    background-color: #ffffff;
+    border-radius: 2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#failedauthentication-title{
+    font-family: 'PretendardMedium';
+    font-size: 5vw;
+}
+#failedauthentication-text{
+    font-family: 'PretendardMedium';
+    font-size: 4vw;
+    text-align: center;
+}
+#failedauthentication-checkbutton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 3vw;
+    background-color: #2150b2;
+    color: #ffffff;
+    border-radius: 2vw;
+    font-family: 'PretendardMedium';
+    font-size: 4vw;
+    width: 20vw;
+    height: 10vw;
+}

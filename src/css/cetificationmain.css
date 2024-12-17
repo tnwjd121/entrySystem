@@ -27,8 +27,14 @@ width: 100%;
     padding-top: 1vw;
     padding-bottom: 1vw;
     width: 80vw;
-
+    outline: none;
+    background: none;
 }
+
+#certificationmain-input input:focus{
+    border-bottom: 0.3vw solid #2150b2; 
+}
+
 
 #certificationmain-re-button{
     background-color: #f3f4f6;

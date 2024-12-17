@@ -6,6 +6,7 @@ import { FaAngleRight } from "react-icons/fa6";
 import { FaCheckCircle } from "react-icons/fa";
 import CarrierModal from './CarrierModal';
 import { useNavigate } from 'react-router-dom';
+import FailedAuthentication from './FailedAuthentication';
 
 export default function PhoneMain() {
 
@@ -13,6 +14,7 @@ export default function PhoneMain() {
   const [selectedCarrier, setSelectedCarrier] = useState(""); // 선택된 통신사 상태 추가
   const navigate = useNavigate();
 
+  // 통신사 포함하기
   const [verificationData, setVerificationData] = useState({
     name: "",
     birth: "",
@@ -99,7 +101,7 @@ export default function PhoneMain() {
       console.log("성별 텍스트:", verificationData.genderText);
       console.log("휴대폰번호:", callNumber);
       console.log("선택된 통신사:", selectedCarrier);
-      navigate('/ibk/entry/certification')
+      navigate('/ibk/entry/certification', { state: { verificationData } });
 
 
     } catch (error) {
@@ -166,7 +168,7 @@ export default function PhoneMain() {
           <label>
             <span id='phonemain-input-title'>휴대폰번호</span><br />
             <div id='phonemain-input-phoneNumber-input'>
-              {/* 통신사 버튼 클릭 시 키보드 추가 */}
+              {/* 통신사 버튼 클릭 시 키보드 제거 */}
               <div id='carrier' onClick={clickOpenCarrierModal}>{selectedCarrier || "통신사"} <IoIosArrowDown /></div>
               <div id='phonemain-input-callnumber'><input type='number' id='callNumber' placeholder='휴대폰번호 (숫자만)' onChange={handleChange} /></div>
             </div>
@@ -201,7 +203,7 @@ export default function PhoneMain() {
       </div>
       <div id='phonemain-verification-button' onClick={authenticationSubmit}
         style={{
-          backgroundColor: isFormComplete() ? "blue" : "gray",
+          backgroundColor: isFormComplete() ? "#2150b2" : "#bccae8",
           cursor: isFormComplete() ? "pointer" : "not-allowed",
         }}
       >
@@ -211,6 +213,10 @@ export default function PhoneMain() {
         {openCarrierModal ? (
           <CarrierModal onSelectCarrier={handleCarrierSelect} />
         ) : null}
+      </div>
+      <div>
+        {/* 본인인증 안 될 경우 해당 팝업창 이용 */}
+        {/* <FailedAuthentication/> */}
       </div>
     </div>
   )

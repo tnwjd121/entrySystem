@@ -25,7 +25,7 @@
 }
 
 #phonemain-input input:focus {
-    border-bottom: 0.3vw solid blue; /* focus 시 하단 선 파란색 */
+    border-bottom: 0.3vw solid #2150b2; 
 }
 #phonemain-input-title{
     font-family: 'PretendardLight';
@@ -76,15 +76,15 @@
 }
 #phonemain-input-phoneNumber-input{
     display: flex;
-    border-bottom: 0.3vw solid rgb(172, 172, 172);
+    /* border-bottom: 0.3vw solid rgb(172, 172, 172); */
     width: 80vw;
 }
 
-
 #carrier{
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    width: 20vw;
+    width: 29vw;
     text-align: center;
     font-size: 4.5vw;
     font-family: 'PretendardRegular';
@@ -92,10 +92,12 @@
     color: #757575;
 }
 #phonemain-input-callnumber input{
-    width: 60vw;
+    margin-left: 4vw;
+    width: 47vw;
     font-size: 5vw;
     border-width: 0;
     padding: 2vw 0;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
 }
 #phonemain-verification{
     width: 80%;
@@ -143,7 +145,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #bccae8;
     font-family: 'PretendardMedium';
     font-size: 5vw;
     color: #ffffff;
@@ -157,5 +158,5 @@
 
 }
 #check{
-    color: blue;
+    color: #2150b2;
 }
