@@ -34,7 +34,7 @@ export default function PhoneMain() {
   const handleChange = (e) => {
     const { id, value } = e.target;
 
-    let genderText = verificationData.genderText;
+    const genderText = verificationData.genderText;
 
     if (id === "gender") {
       if (value === "1" || value === "3") {

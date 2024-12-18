@@ -20,8 +20,8 @@
     border: none;
     border-bottom: 0.3vw solid rgb(172, 172, 172);
     font-family: 'PretendardLight';
-    outline: none; /* 네모 박스 제거 */
-    background: none; /* 배경 투명화 */
+    outline: none; 
+    background: none; 
 }
 
 #phonemain-input input:focus {
@@ -79,6 +79,7 @@
     /* border-bottom: 0.3vw solid rgb(172, 172, 172); */
     width: 80vw;
 }
+
 
 #carrier{
     display: flex;

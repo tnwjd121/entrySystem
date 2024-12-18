@@ -1,0 +1,26 @@
+{
+  "entrylist": [
+    {
+      "id": "6030",
+      "clientName": "가나다",
+      "partnerCompany": "라마바",
+      "name": "백수정",
+      "position": "사원",
+      "entryDate": "2024-12-20",
+      "entryTime": "17:19",
+      "purpose": "출입",
+      "callNumber": "010756621220"
+    },
+    {
+      "id": "b5a9",
+      "clientName": "가나다",
+      "partnerCompany": "라마바",
+      "name": "",
+      "position": "사원",
+      "entryDate": "2024-12-13",
+      "entryTime": "18:28",
+      "purpose": "출입",
+      "callNumber": ""
+    }
+  ]
+}

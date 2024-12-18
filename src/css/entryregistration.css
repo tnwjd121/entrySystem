@@ -1,0 +1,93 @@
+#entryregistration-body{
+    position: fixed;
+    top: 0;
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+}
+#entryregistration-top{
+    display: flex;
+    align-items: center;
+    height: 14vw;
+}
+#entryregistration-closebutton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3579f6;
+    margin-left: 4vw;
+    font-size: 7vw;
+}
+hr {
+    margin: 0;
+}
+
+#entryregistration-title{
+    font-family: 'PretendardMedium';
+    text-align: center;
+    font-size: 5.5vw;
+    /* 옆 상관없이  전체 가운데 정렬 */
+    margin-left: 29vw;
+}
+#entryregistration-input{
+    padding-top: 5vw;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 130vw;
+}
+
+#entryregistration-input input {
+    border: none;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
+    font-family: 'PretendardLight';
+    outline: none;
+    background: none;
+    font-size: 4.5vw;
+    font-family: 'PretendardRegular';
+}
+
+#entryregistration-input input:focus {
+    border-bottom: 0.3vw solid #2150b2; 
+}
+
+#entryregistration-input-title{
+    font-family: 'PretendardLight';
+    font-size: 4vw;
+}
+
+#clientName, #partnerCompany, #position, #name, #purpose, #callNumber{
+    width: 80vw;
+}
+
+#entryregistration-input-entrydate-flex{
+    display: flex;
+
+}
+
+#entryregistration-entrybutton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'PretendardMedium';
+    font-size: 5vw;
+    color: #ffffff;
+    height: 10vw;
+    margin: 0 auto;
+    margin-top: 5vw;
+    border-radius: 2vw;
+    background-color: #bccae8;
+    height: 15vw;
+    position: fixed;
+    width: 90%;
+    left: 5%;
+    bottom: 5%;
+}
+#entryDate{
+    width: 60vw;
+}
+#entryTime{
+    width: 30vw;
+}
