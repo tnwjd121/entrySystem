@@ -65,7 +65,7 @@ export default function CertificationMain() {
                     인증번호 재전송
                 </div>
             </div>
-            {/* 클릭 버튼 수정정 */}
+            {/* 클릭 버튼 수정 */}
             <div id='certificationmain-button'
             onClick={certificationSubmit}
             style={{backgroundColor: isCertificationComplete()? "#2150b2" : "#bccae8",
