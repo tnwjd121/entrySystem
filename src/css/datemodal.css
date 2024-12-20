@@ -42,6 +42,20 @@
     justify-content: space-evenly;
     width: 65vw;
     margin: 3vw auto;
+    position: relative;
+}
+#datemodal-date::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 12vw;
+  border-top: 2px solid #2150b2;
+  border-bottom: 2px solid #2150b2;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 10;
 }
 
 .scroll-container {
@@ -51,6 +65,7 @@
     scrollbar-width: none; 
     -ms-overflow-style: none;
     text-align: center;
+    position: relative;
   }
   .scroll-container::-webkit-scrollbar {
     display: none;

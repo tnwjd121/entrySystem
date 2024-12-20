@@ -7,7 +7,7 @@
       "name": "백수정",
       "position": "사원",
       "entryDate": "2024-12-20",
-      "entryTime": "17:19",
+      "entryTime": "17",
       "purpose": "출입",
       "callNumber": "010756621220"
     },
@@ -15,11 +15,22 @@
       "id": "b5a9",
       "clientName": "가나다",
       "partnerCompany": "라마바",
-      "name": "",
+      "name": "홍길동",
       "position": "사원",
       "entryDate": "2024-12-13",
-      "entryTime": "18:28",
+      "entryTime": "18",
       "purpose": "출입",
+      "callNumber": "01085458788"
+    },
+    {
+      "id": "025b",
+      "clientName": "",
+      "partnerCompany": "",
+      "name": "",
+      "position": "",
+      "entryDate": "",
+      "entryTime": "",
+      "purpose": "",
       "callNumber": ""
     }
   ]

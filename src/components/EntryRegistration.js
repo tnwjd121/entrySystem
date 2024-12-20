@@ -126,11 +126,11 @@ export default function EntryRegistration({toggleEntryRegistration}) {
                 <div id='entryregistration-input-entrydate'>
                     <label>
                         <span id='entryregistration-input-title'>출입일시</span><br />
-                        <div id='entryregistration-input-entrydate-flex'>
+                        <div id='entryregistration-input-entryday-flex'>
                             {/* 출입일시 스크롤 형식 */}
                             {/* <input type='date' id='entryDate' placeholder='출입날짜' onChange={handleChange} value={entryregistrationData.entryDate}/> */}
                             <div id='entryDate' onClick={isOpenDate}>출입일시</div>
-                            {openDate?<DateModal/>:null }
+                            {openDate?<DateModal  isOpenDate={isOpenDate}/>:null }
                             {/* 시간만 나오게 하고, 스크롤 형식 */}
                             {/* <input type='time' id='entryTime' placeholder='출입시간'onChange={handleChange} value={entryregistrationData.entryTime}/> */}
                         </div>
