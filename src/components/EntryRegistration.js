@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { CgClose } from "react-icons/cg";
 import axios from 'axios'
 import DateModal from './DateModal';
+import Test from './Test';
 
 export default function EntryRegistration({toggleEntryRegistration}) {
     const API_URL = "http://localhost:5000"
@@ -66,12 +67,6 @@ export default function EntryRegistration({toggleEntryRegistration}) {
     };
 
 
-    // 3.출일일시, 출입날짜 디자인 변경
-    const months = Array.from({ length: 12 }, (_, i) => i + 1);
-    const days = Array.from({ length: 31 }, (_, i) => i + 1);
-    const years = Array.from({ length: 100 }, (_, i) => 2024 - i);
-
-
     const [openDate, setOpenDate] = useState(false);
 
     const isOpenDate = () => {
@@ -131,6 +126,7 @@ export default function EntryRegistration({toggleEntryRegistration}) {
                             {/* <input type='date' id='entryDate' placeholder='출입날짜' onChange={handleChange} value={entryregistrationData.entryDate}/> */}
                             <div id='entryDate' onClick={isOpenDate}>출입일시</div>
                             {openDate?<DateModal  isOpenDate={isOpenDate}/>:null }
+                            {/* {openDate?<Test/>:null } */}
                             {/* 시간만 나오게 하고, 스크롤 형식 */}
                             {/* <input type='time' id='entryTime' placeholder='출입시간'onChange={handleChange} value={entryregistrationData.entryTime}/> */}
                         </div>

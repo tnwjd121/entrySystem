@@ -3,6 +3,10 @@ import "../css/datemodal.css";
 import { GoDash } from "react-icons/go";
 
 export default function DateModal({ isOpenDate }) {
+      // 참고
+    // https://www.npmjs.com/package/react-native-date-picker
+    //https://jaylee-log.tistory.com/94
+    
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 100 }, (_, i) => currentYear + i);
   const months = Array.from({ length: 12 }, (_, i) => i + 1);
@@ -12,7 +16,7 @@ export default function DateModal({ isOpenDate }) {
   const [selectedMonth, setSelectedMonth] = useState(1);
   const [selectedDay, setSelectedDay] = useState(1);
 
-  const itemHeight = 30; // 각 항목의 높이(px)
+  const itemHeight = 30; 
 
   const handleScroll = (type, container, items, setSelected) => {
     const scrollTop = container.scrollTop;
