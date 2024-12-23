@@ -23,11 +23,10 @@ export default function CertificationMain() {
     const isCertificationComplete = () => certificationData.certification.length == 6;
 
     const certificationSubmit = async () => {
-        try {
+
+        if(isCertificationComplete()){
             console.log("인증번호:", certificationData.certification);
             navigate('/ibk/entry/entry', { state: { verificationData } });
-        } catch (error) {
-            console.error("인증번호 오류 발생")
         }
     }
 
@@ -36,14 +35,19 @@ export default function CertificationMain() {
     // 인증번호 재전송 누르면 정보 보내지고, 인증번호 초기화
     const reCertificationSubmit = ()=> {
         const certification = document.querySelector("#certification");
+        const certificationButton = document.querySelector("#certificationmain-button")
+
         try {
             console.log(verificationData)
             certification.value = '';
+            certificationData.certification ='';
+            certificationButton.style.backgroundColor ='#bccae8';
             
         } catch (error) {
             console.error("인증번호 오류 발생")
         }
     }
+
 
 
 

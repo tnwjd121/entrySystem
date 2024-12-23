@@ -4,16 +4,19 @@ import { useNavigate } from 'react-router-dom';
 
 export default function Home() { 
  const date = new Date().toLocaleDateString(); 
- // 초 안나오게 변경
- const time = new Date().toLocaleTimeString(); 
+ 
+ const options = {
+     hour: '2-digit',
+     minute: '2-digit',
+     hour12: true
+    };
+
+const time = new Date().toLocaleTimeString('ko-KR', options);
 
  const navigate = useNavigate();
  const navigateToEnter = () =>{
      navigate('/ibk/entry/phoneVerification')
  }
-
-
-
 
   return (
     <div id='home-body'>

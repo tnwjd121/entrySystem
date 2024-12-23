@@ -80,10 +80,11 @@ hr {
     border-radius: 2vw;
     background-color: #bccae8;
     height: 15vw;
-    position: fixed;
+    /* position: fixed; */
     width: 90%;
     left: 5%;
     bottom: 5%;
+    z-index: 5;
 }
 #entryDate{
     width: 60vw;

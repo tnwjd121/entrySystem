@@ -29,6 +29,7 @@ width: 100%;
     width: 80vw;
     outline: none;
     background: none;
+    margin-bottom: 5vw;
 }
 
 #certificationmain-input input:focus{
@@ -41,11 +42,19 @@ width: 100%;
     font-family: 'PretendardMedium';
     font-size: 3.5vw;
     width: 23vw;
-    margin-top: 5vw;
     padding: 2vw 2vw;
     border-radius: 1vw;
-    
-
+}
+#certificationmain-re-button:active{
+    background-color: #dadada;
+    font-size: 3.4vw;
+    width: 22vw;
+    height: 4vw;
+    padding: 2vw;
+    margin: 0.5vw;
+}
+#certificationmain-re-button:hover{
+    background-color: #dadada;
 }
 
 
