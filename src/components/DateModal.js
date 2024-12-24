@@ -1,17 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { Animated, Button, ScrollView, Text, View, TouchableWithoutFeedback, StyleSheet } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, Button, ScrollView, Text, View, TouchableWithoutFeedback, StyleSheet, Dimensions } from "react-native";
 import { GoDash } from "react-icons/go";
 import { debounce } from 'lodash';
-import Constants from 'expo-constants';
+
+// 참고
+//https://velog.io/@bang9dev/React-Native-Scrollable-Time-Picker-%EB%A7%8C%EB%93%A4%EA%B8%B01
+
+// 1. 중간에 위치되는 값으로 값 저장
+// 2. 중간에 위치 될 경우 색깔 표시
+// 3. 현재 날짜 기준으로 반영
+// 월 선택할 경우 일자 해당하는 일자까지 나오게(이거는 만들 수 있으면 만들기)
+
 
 const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 100 }, (_, i) => currentYear + i);
+const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
 const days = Array.from({ length: 31 }, (_, i) => i + 1);
 
-const BUTTON_HEIGHT = "10vw";
+const { height: viewportHeight } = Dimensions.get('window');
+const { width: viewportWidth } = Dimensions.get('window');
+
+const BUTTON_HEIGHT = viewportHeight * 0.18;
 const VIEW_HEIGHT = BUTTON_HEIGHT * 3;
-const VIEW_WIDTH = "60vw";
+const VIEW_WIDTH = '75vw';
 
 const getCenterPosition = (offsetY) => {
   return Math.round(offsetY / BUTTON_HEIGHT) * BUTTON_HEIGHT;
@@ -20,22 +31,11 @@ const getCenterPosition = (offsetY) => {
 const getCenterPositionFromIndex = (index) => {
   return index * BUTTON_HEIGHT;
 }
-const fillEmpty = (visibleCount, values) => {
-  const fillCount = (visibleCount - 1) / 2;
-  for (let i = 0; i < fillCount; i++) {
-    values.unshift('');
-    values.push('');
-  }
-  return values;
-}
 
 export default function DateModal({ isOpenDate }) {
-  const [day, setDay] = React.useState((new Date().getFullYear()));
   return (
     <View style={styles.view}>
-      <TimePicker
-        value={day}
-        onChange={setDay}
+      <DatePicker
         width={VIEW_WIDTH}
         buttonHeight={BUTTON_HEIGHT}
         visibleCount={3}
@@ -44,11 +44,22 @@ export default function DateModal({ isOpenDate }) {
   );
 }
 
-const TimePicker = ({ width, buttonHeight, visibleCount }) => {
-  if (visibleCount % 2 === 0) throw new Error('visibleCount must be odd');
 
-  const scrollY = React.useRef(new Animated.Value(0)).current;
-  const refs = React.useRef(
+
+const DatePicker = ({ width, buttonHeight, visibleCount, viewHeight }) => {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1;
+  const currentDay = currentDate.getDate();
+
+  console.log(currentYear)
+
+  const [selectedYear, setSelectedYear] = useState(currentYear);
+  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
+  const [selectedDay, setSelectedDay] = useState(currentDay);
+  
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const refs = useRef(
     Array.from({ length: 3 }).map(() => React.createRef())
   );
 
@@ -87,10 +98,16 @@ const TimePicker = ({ width, buttonHeight, visibleCount }) => {
     };
   };
 
-  const [scrollProps] = React.useState(() => {
+  const [scrollProps] = useState(() => {
     return Array.from({ length: 3 }).map((_, index) => getScrollProps(index));
   });
 
+  const fillEmpty = (visibleCount, values) => {
+    const fillCount = (visibleCount - 1) / 2;
+    let result = [...values];
+    result = Array(fillCount).fill('').concat(values).concat(Array(fillCount).fill(''));
+    return result;
+  };
   const getOnPress = (scrollViewIdx, buttonIdx) => () => {
     const targetIdx = buttonIdx - 1;
     if (targetIdx < 0) return;
@@ -98,9 +115,6 @@ const TimePicker = ({ width, buttonHeight, visibleCount }) => {
     scrollProps[scrollViewIdx].ref.current.scrollTo({ y: CENTER_POSITION });
   };
 
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState(1);
-  const [selectedDay, setSelectedDay] = useState(1);
 
   return (
     <View>
@@ -112,53 +126,66 @@ const TimePicker = ({ width, buttonHeight, visibleCount }) => {
         <View >
           <Text style={styles.title}>출입날짜</Text>
         </View>
-          <View style={styles.view}>
-            <View style={[
-              styles.container,
-              { width, height: visibleCount * buttonHeight },
-            ]}
-            >
-              <ScrollView {...scrollProps[0]}>
-                {fillEmpty(visibleCount, years).map((year, index) => (
+        <View style={styles.view}>
+          <View style={[styles.container]}>
+            <ScrollView {...scrollProps[0]}>
+              {fillEmpty(visibleCount, years).map((year, index) => (
+                year !== '' ? (
                   <CustomButton
                     key={year}
                     label={`${year}년`}
-                    onPress={() => setSelectedDay(0, index)}
+                    onPress={getOnPress(0,index)}
                     selected={year === selectedYear}
                   />
-                ))}
-              </ScrollView>
-              <ScrollView {...scrollProps[0]}>
-                {fillEmpty(visibleCount, months).map((month, index) => (
+                ) : (
+                  <View style={styles.button} key={`empty-${index}`}>
+                    <Text style={styles.buttonLabel}></Text>
+                  </View>
+                )
+              ))}
+            </ScrollView>
+            <ScrollView {...scrollProps[1]}>
+              {fillEmpty(visibleCount, months).map((month, index) => (
+                month !== '' ? (
                   <CustomButton
                     key={month}
                     label={`${month}월`}
-                    onPress={() => setSelectedDay(1, index)}
+                    onPress={getOnPress(1,index)}
                     selected={month === selectedMonth}
                   />
-                ))}
-              </ScrollView>
-              <ScrollView {...scrollProps[0]}>
-                {fillEmpty(visibleCount, days).map((day, index) => (
+                ) : (
+                  <View style={styles.button} key={`empty-${index}`}>
+                    <Text style={styles.buttonLabel}></Text>
+                  </View>
+                )
+              ))}
+            </ScrollView>
+            <ScrollView {...scrollProps[2]}>
+              {fillEmpty(visibleCount, days).map((day, index) => (
+                day !== '' ? (
                   <CustomButton
                     key={day}
                     label={`${day}일`}
-                    onPress={() => setSelectedDay(2, index)}
+                    onPress={getOnPress(2,index)}
                     selected={day === selectedDay}
                   />
-                ))}
-              </ScrollView>
-              <OverlayView />
-            </View>
+                ) : (
+                  <View style={styles.button} key={`empty-${index}`}>
+                    <Text style={styles.buttonLabel}></Text>
+                  </View>
+                )
+              ))}
+            </ScrollView>
+            <OverlayView />
           </View>
-
+        </View>
         <View style={styles.datemodalbutton}>
           <Text style={styles.buttontext}>확인</Text>
         </View>
       </View>
     </View>
   );
-}
+};
 
 const CustomButton = ({ label, onPress }) => {
   return (
@@ -175,9 +202,8 @@ const OverlayView = () => {
     <View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.overlay]}>
       <View style={styles.overlayVisibleView}>
         <View style={styles.overlayVisibleViewInner} />
-        <View style={[styles.overlayVisibleViewInner, { marginLeft: 12 }]} />
-        <View style={[styles.overlayVisibleViewInner, { marginLeft: 12 }]} />
-        <View style={styles.overlayVisibleViewInner} />
+        <View style={[styles.overlayVisibleViewInner, { marginLeft: '4vw' }]} />
+        <View style={[styles.overlayVisibleViewInner, { marginLeft: '4vw' }]} />
       </View>
     </View>
   );
@@ -198,7 +224,7 @@ const styles = StyleSheet.create({
     bottom: '2%',
     left: '2%',
     width: '96%',
-    height: '100vw',
+    height: '50vh',
     backgroundColor: '#ffffff',
     borderRadius: '8vw',
     zIndex: '1000'
@@ -233,7 +259,7 @@ const styles = StyleSheet.create({
   },
   dash: {
     display: 'flex',
-    justifyContent:'center',
+    justifyContent: 'center',
     alignItems: 'center',
     fontSize: '20vw',
     height: '5vw',
@@ -246,39 +272,45 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     alignItems: 'center',
-    // paddingTop: Constants.statusBarHeight,
     padding: '4vw',
-    width:'80vw',
+    width: '90vw',
     marginLeft: 'auto',
     marginRight: 'auto',
-    height: '10vw'
   },
   container: {
     alignSelf: 'center',
     flexDirection: 'row',
     fontFamily: 'PretendardMedium',
+    width:'75vw',
+    height:'21vh'
   },
   button: {
-    height: "10vw",
+    height: "7vh",
     alignItems: 'center',
     justifyContent: 'center',
   },
   buttonLabel: {
     fontWeight: 'bold',
+    fontSize: '5vw'
   },
   overlay: {
+    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    height:'21vh',
+
   },
   overlayVisibleView: {
-    width: '100%',
-    height: "10vw",
+    display: 'flex',
+    justifyContent: 'center',
+    width: '75vw',
+    height: "7vh",
     flexDirection: 'row',
   },
   overlayVisibleViewInner: {
-    width: "20vw",
+    width: "21vw",
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: '#c8c8c8',
+    borderColor: '#3579f6',
   },
 });
