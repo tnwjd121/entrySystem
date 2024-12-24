@@ -52,7 +52,6 @@ const DatePicker = ({ width, buttonHeight, visibleCount, viewHeight }) => {
   const currentMonth = currentDate.getMonth() + 1;
   const currentDay = currentDate.getDate();
 
-  console.log(currentYear)
 
   const [selectedYear, setSelectedYear] = useState(currentYear);
   const [selectedMonth, setSelectedMonth] = useState(currentMonth);
