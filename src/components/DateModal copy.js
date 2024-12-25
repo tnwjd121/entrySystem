@@ -23,10 +23,10 @@ const VIEW_HEIGHT = BUTTON_HEIGHT * 3;
 const VIEW_WIDTH = '75vw';
 
 const getCenterPosition = (offsetY) => {
-  const CENTER_OFFSET = offsetY % BUTTON_HEIGHT; // 중앙 위치 오프셋 계산
-  const center = offsetY - CENTER_OFFSET + BUTTON_HEIGHT / 2; // 중앙 위치로 조정
-  console.log(`Center Offset: ${CENTER_OFFSET}, Final Center: ${center}`); // 위치 확인
-  return center;
+  const adjustedHeight = Math.min(BUTTON_HEIGHT, 100); // 최대 100
+  const centerPosition = Math.round(offsetY / adjustedHeight) * adjustedHeight;
+
+  return centerPosition;
 };
 
 
@@ -87,36 +87,28 @@ const DatePicker = ({ width, buttonHeight, visibleCount }) => {
   }, [selectedYear, selectedMonth]);
   
   useEffect(() => {
-    // 오늘 날짜의 연도, 월, 일을 각각 찾음
     const todayYearIndex = years.indexOf(currentYear);
-    const todayMonthIndex = months.indexOf(currentMonth); // 1부터 시작
-    const todayDayIndex = currentDay - 1; // 0부터 시작
+    const todayMonthIndex = months.indexOf(currentMonth - 1); // currentMonth는 0-indexed
+    const todayDayIndex = selectedDay - 1;  // currentDay를 0-indexed로 변경
   
-    // 각 ScrollView 초기 스크롤 설정
-    refs.current[0]?.current?.scrollTo({
-      y: getCenterPositionFromIndex(todayYearIndex, visibleCount),
-      animated: true,
-    });
-    refs.current[1]?.current?.scrollTo({
-      y: getCenterPositionFromIndex(todayMonthIndex, visibleCount),
-      animated: true,
-    });
-    refs.current[2]?.current?.scrollTo({
-      y: getCenterPositionFromIndex(todayDayIndex, visibleCount),
-      animated: true,
-    });
-
-    setSelectedYear(currentYear);
-    setSelectedMonth(currentMonth);
-    setSelectedDay(currentDay);
+    // 각 스크롤 위치를 제대로 맞추기 위해 refs로 각각의 ScrollView에 대해 스크롤 호출
+    refs.current[0]?.current?.scrollTo({ y: getCenterPositionFromIndex(todayYearIndex, visibleCount) });
+    refs.current[1]?.current?.scrollTo({ y: getCenterPositionFromIndex(todayMonthIndex, visibleCount) });
+    refs.current[2]?.current?.scrollTo({ y: getCenterPositionFromIndex(todayDayIndex, visibleCount) });
   
-  }, []);
+    console.log(todayYearIndex);
+    console.log(todayMonthIndex);
+    console.log(todayDayIndex);
   
+  }, [currentDay, currentMonth, currentYear, selectedDay]); // selectedDay가 변경될 때마다 실행
   
   const getCenterPositionFromIndex = (index, visibleCount) => {
-    const offset = Math.floor((visibleCount - 1) / 2); // 중앙 위치 오프셋
-    const adjustedIndex = Math.max(index - offset, 0); // 최소값 보정
+    const offset = Math.floor((visibleCount - 1) / 2);
+    const adjustedIndex = Math.max(index - offset, 0); // 최소 0이 되도록 처리
     const centerPosition = adjustedIndex * BUTTON_HEIGHT;
+  
+    console.log('Adjusted Index:', adjustedIndex);
+    console.log('Center Position:', centerPosition);
   
     return centerPosition;
   };
@@ -131,68 +123,62 @@ const DatePicker = ({ width, buttonHeight, visibleCount }) => {
   
 
   
-  const getOnScrollStop = (index) => (e) => {
-    const offsetY = e.nativeEvent.contentOffset.y;
-    const CENTER_POSITION = getCenterPosition(offsetY); // 중앙 위치 계산
+
+  const getOnScrollStop = (index) => (offsetY, label) => {
+
+      // offsetY와 BUTTON_HEIGHT 값 로그
+  console.log('offsetY:', offsetY);
+  console.log('BUTTON_HEIGHT:', BUTTON_HEIGHT);
   
-    console.log(`Scroll Y: ${offsetY}, Center Position: ${CENTER_POSITION}`);  // e.nativeEvent.contentOffset.y와 getCenterPosition을 로그로 찍어봄
-    
+    const CENTER_POSITION = getCenterPosition(offsetY);
     const actualIndex = Math.round(CENTER_POSITION / BUTTON_HEIGHT);
-    console.log(`Actual Index: ${actualIndex}`);
-    
-    let newSelectedValue;
   
+    // 각 인덱스에 대해 선택된 값을 업데이트
     if (index === 0) {
-      newSelectedValue = years[actualIndex];
-      setSelectedYear(newSelectedValue);
-      console.log(`Selected Year: ${newSelectedValue}`);
+      setSelectedYear(years[actualIndex]);
     } else if (index === 1) {
-      newSelectedValue = months[actualIndex];
-      setSelectedMonth(newSelectedValue);
-      console.log(`Selected Month: ${newSelectedValue}`);
+      setSelectedMonth(months[actualIndex]);
     } else if (index === 2) {
-      newSelectedValue = days[actualIndex];
-      setSelectedDay(newSelectedValue);
-      console.log(`Selected Day: ${newSelectedValue}`);
+      setSelectedDay(days[actualIndex]);
     }
   
-    // 스크롤 위치 조정
-    refs.current[index]?.current?.scrollTo({
-      y: CENTER_POSITION,
-      animated: true,
-    });
-    console.log(`Scrolled to position: ${CENTER_POSITION}`);
+    // 스크롤 위치 업데이트
+    refs.current[index].current.scrollTo({ y: CENTER_POSITION });
+    console.log('scrollTo called with y:', CENTER_POSITION);
   };
-  
-  
   
   
   
 
   const getScrollProps = (index) => {
+    const onScrollStop = debounce(getOnScrollStop(index), 200, {
+      leading: false,
+      trailing: true,
+    });
     return {
       showsVerticalScrollIndicator: false,
+      contentContainerStyle: {
+        left: 0,
+        right: 0,
+        position: 'absolute',
+      },
       ref: refs.current[index],
       onScrollBeginDrag: () => {
-        console.log("onScrollBeginDrag triggered");
-        // 스크롤 시작 시 debounce 취소
+        onScrollStop.cancel();
       },
       onScrollEndDrag: (e) => {
-        console.log("onScrollEndDrag triggered");
-        getOnScrollStop(index)(e); // 직접 이벤트 처리
+        onScrollStop.cancel();
+        onScrollStop(e.nativeEvent.contentOffset.y, 'onScrollEndDrag');
       },
       onMomentumScrollBegin: () => {
-        console.log("onMomentumScrollBegin triggered");
-        // 관성 스크롤 시작 시 처리
+        onScrollStop.cancel();
       },
       onMomentumScrollEnd: (e) => {
-        console.log("onMomentumScrollEnd triggered");
-        getOnScrollStop(index)(e); // 직접 이벤트 처리
+        onScrollStop.cancel();
+        onScrollStop(e.nativeEvent.contentOffset.y, 'onMomentumScrollEnd');
       },
     };
   };
-
-
 
   const [scrollProps] = useState(() => {
     return Array.from({ length: 3 }).map((_, index) => getScrollProps(index));
@@ -231,12 +217,7 @@ const DatePicker = ({ width, buttonHeight, visibleCount }) => {
         </View>
         <View style={styles.view}>
           <View style={[styles.container]}>
-            <ScrollView {...scrollProps[0]}
-                onScroll={(e) => {
-                  console.log('Scroll Y:', e.nativeEvent.contentOffset.y); // 로그 추가
-                  getOnScrollStop(0)(e); // 호출 확인
-                }}
-            >
+            <ScrollView {...scrollProps[0]}>
               {fillEmpty(visibleCount, years).map((year, index) => (
                 year !== '' ? (
                   <CustomButton
@@ -309,15 +290,17 @@ const CustomButton = ({ label, onPress, selected }) => {
   );
 };
 
-const OverlayView = () => (
-  <View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.overlay]}>
-    <View style={styles.overlayVisibleView}>
-      <View style={styles.overlayVisibleViewInner} />
-      <View style={[styles.overlayVisibleViewInner, { marginLeft: '4vw' }]} />
-      <View style={[styles.overlayVisibleViewInner, { marginLeft: '4vw' }]} />
+const OverlayView = () => {
+  return (
+    <View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.overlay]}>
+      <View style={styles.overlayVisibleView}>
+        <View style={styles.overlayVisibleViewInner} />
+        <View style={[styles.overlayVisibleViewInner, { marginLeft: '4vw' }]} />
+        <View style={[styles.overlayVisibleViewInner, { marginLeft: '4vw' }]} />
+      </View>
     </View>
-  </View>
-);
+  );
+};
 
 const styles = StyleSheet.create({
   background: {
