@@ -87,7 +87,12 @@ hr {
     z-index: 5;
 }
 #entryDate{
-    width: 60vw;
+    display: flex;
+    justify-content: space-around;
+    width: 40vw;
+    font-family: 'PretendardLight';
+    font-size: 4.5vw;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
 }
 #entryTime{
     width: 30vw;

@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { CgClose } from "react-icons/cg";
 import axios from 'axios'
 import DateModal from './DateModal';
+import { FaRegCalendar } from "react-icons/fa6";
 
 export default function EntryRegistration({toggleEntryRegistration}) {
     const API_URL = "http://localhost:5000"
@@ -72,6 +73,11 @@ export default function EntryRegistration({toggleEntryRegistration}) {
         setOpenDate(!openDate);
     }
 
+    const handleDateSelect = (date) => {
+        setEntryregistrationData((prev) => ({ ...prev, entryDate: date}))
+        setOpenDate(!openDate);
+    }
+
 
     // 여기는 출입명단 작성
     // 아래에 다른 컴포넌트로 등록한 명단 나오게 하기(삭제 버튼)
@@ -123,8 +129,12 @@ export default function EntryRegistration({toggleEntryRegistration}) {
                         <div id='entryregistration-input-entryday-flex'>
                             {/* 출입일시 스크롤 형식 */}
                             {/* <input type='date' id='entryDate' placeholder='출입날짜' onChange={handleChange} value={entryregistrationData.entryDate}/> */}
-                            <div id='entryDate' onClick={isOpenDate}>출입일시</div>
-                            {openDate?<DateModal  isOpenDate={isOpenDate}/>:null }
+                            {/* 연도-월-일 달력 모양 */}
+                            <div id='entryDate' onClick={isOpenDate}>
+                                <div>{entryregistrationData.entryDate ||"연도-월-일"}</div>
+                                <div><FaRegCalendar/></div>
+                            </div>
+                            {openDate?<DateModal onSelectDate={handleDateSelect}/>:null }
                             {/* 시간만 나오게 하고, 스크롤 형식 */}
                             {/* <input type='time' id='entryTime' placeholder='출입시간'onChange={handleChange} value={entryregistrationData.entryTime}/> */}
                         </div>
