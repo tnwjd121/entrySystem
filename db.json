@@ -23,37 +23,15 @@
       "callNumber": "01085458788"
     },
     {
-      "id": "ffe2",
-      "clientName": "",
-      "partnerCompany": "",
+      "id": "5105",
+      "clientName": "ibk저축은행",
+      "partnerCompany": "ibk저축은행",
       "name": "백수정",
-      "position": "",
-      "entryDate": "",
-      "entryTime": "",
-      "purpose": "",
+      "position": "사원",
+      "entryDate": "2024-10-08",
+      "entryTime": "8",
+      "purpose": "출입",
       "callNumber": "01075662120"
-    },
-    {
-      "id": "5a85",
-      "clientName": "",
-      "partnerCompany": "",
-      "name": "",
-      "position": "",
-      "entryDate": "",
-      "entryTime": "",
-      "purpose": "",
-      "callNumber": ""
-    },
-    {
-      "id": "3542",
-      "clientName": "",
-      "partnerCompany": "",
-      "name": "",
-      "position": "",
-      "entryDate": "2024-12-28",
-      "entryTime": "",
-      "purpose": "",
-      "callNumber": ""
     }
   ]
 }

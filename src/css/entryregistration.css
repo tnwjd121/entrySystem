@@ -78,7 +78,6 @@ hr {
     margin: 0 auto;
     margin-top: 5vw;
     border-radius: 2vw;
-    background-color: #bccae8;
     height: 15vw;
     /* position: fixed; */
     width: 90%;
@@ -88,12 +87,18 @@ hr {
 }
 #entryDate{
     display: flex;
-    justify-content: space-around;
-    width: 40vw;
+    justify-content: space-between;
+    width: 38vw;
     font-family: 'PretendardLight';
     font-size: 4.5vw;
     border-bottom: 0.3vw solid rgb(172, 172, 172);
+    margin-right: 4vw;
 }
 #entryTime{
-    width: 30vw;
+    display: flex;
+    justify-content: space-between;
+    font-family: 'PretendardLight';
+    font-size: 4.5vw;
+    width: 38vw;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
 }

@@ -5,6 +5,8 @@ import { CgClose } from "react-icons/cg";
 import axios from 'axios'
 import DateModal from './DateModal';
 import { FaRegCalendar } from "react-icons/fa6";
+import { IoMdTime } from "react-icons/io";
+import TimeModal from './TimeModal';
 
 export default function EntryRegistration({toggleEntryRegistration}) {
     const API_URL = "http://localhost:5000"
@@ -48,16 +50,19 @@ export default function EntryRegistration({toggleEntryRegistration}) {
     };
 
     const addSubmit = async () => {
-        try {
-            // 서버로 데이터 전송
-            await axios.post(`${API_URL}/entrylist`, entryregistrationData);
-            console.log("등록된 데이터:", entryregistrationData);
+        if(isFormComplete()) {
+            try {
+                // 서버로 데이터 전송
+                await axios.post(`${API_URL}/entrylist`, entryregistrationData);
+                console.log("등록된 데이터:", entryregistrationData);
+    
+                // 데이터 초기화
+                setEntryregistrationData(initialState); // 폼 초기화
+                setVerificationState(null); // verificationState 초기화
+            } catch (error) {
+                console.error("등록 에러 발생:", error);
+            }
 
-            // 데이터 초기화
-            setEntryregistrationData(initialState); // 폼 초기화
-            setVerificationState(null); // verificationState 초기화
-        } catch (error) {
-            console.error("등록 에러 발생:", error);
         }
     };
 
@@ -78,9 +83,24 @@ export default function EntryRegistration({toggleEntryRegistration}) {
         setOpenDate(!openDate);
     }
 
+    const [openTime, setOpentime] = useState(false);
 
-    // 여기는 출입명단 작성
-    // 아래에 다른 컴포넌트로 등록한 명단 나오게 하기(삭제 버튼)
+    const isOpenTime = () => {
+        setOpentime(!openTime)
+    }
+
+    const handleTimeSelect = (time) => {
+        setEntryregistrationData((prev) => ({...prev, entryTime: time}))
+        setOpentime(!openTime)
+    }
+
+    const isFormComplete = () => {
+        const fields = ["clientName", "partnerCompany", "name", "position", "entryDate", "entryTime", "purpose", "callNumber"];
+        return (
+            fields.every((field) => entryregistrationData[field])
+        )
+    }
+
     return (
         <div id='entryregistration-body'>
             <div id='entryregistration-top'>
@@ -127,15 +147,17 @@ export default function EntryRegistration({toggleEntryRegistration}) {
                     <label>
                         <span id='entryregistration-input-title'>출입일시</span><br />
                         <div id='entryregistration-input-entryday-flex'>
-                            {/* 출입일시 스크롤 형식 */}
-                            {/* <input type='date' id='entryDate' placeholder='출입날짜' onChange={handleChange} value={entryregistrationData.entryDate}/> */}
-                            {/* 연도-월-일 달력 모양 */}
                             <div id='entryDate' onClick={isOpenDate}>
                                 <div>{entryregistrationData.entryDate ||"연도-월-일"}</div>
                                 <div><FaRegCalendar/></div>
                             </div>
                             {openDate?<DateModal onSelectDate={handleDateSelect}/>:null }
-                            {/* 시간만 나오게 하고, 스크롤 형식 */}
+                            {/* 시간만 나오게 하고, 스크롤 형식  */}
+                            <div id='entryTime' onClick={isOpenTime}>
+                                <div>{`${entryregistrationData.entryTime}시 `||"시간"}</div>
+                                <div><IoMdTime /></div>
+                            </div>
+                            {openTime?<TimeModal onSelectTime={handleTimeSelect}/>:null }
                             {/* <input type='time' id='entryTime' placeholder='출입시간'onChange={handleChange} value={entryregistrationData.entryTime}/> */}
                         </div>
                     </label>
@@ -147,7 +169,15 @@ export default function EntryRegistration({toggleEntryRegistration}) {
                     </label>
                 </div>
             </div>
-            <div id='entryregistration-entrybutton' onClick={addSubmit}>등록</div>
+            <div id='entryregistration-entrybutton' 
+                onClick={addSubmit}
+                style={{
+                    backgroundColor: isFormComplete() ? "#2150b2" : "#bccae8",
+                    cursor: isFormComplete() ? "pointer" : "not-allowed",
+                }}
+            >
+                등록
+            </div>
         </div>
     )
 }

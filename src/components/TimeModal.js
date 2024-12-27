@@ -3,16 +3,11 @@ import { Animated, Button, ScrollView, Text, View, TouchableWithoutFeedback, Sty
 import { GoDash } from "react-icons/go";
 import { debounce } from 'lodash';
 
-// 참고
-//https://velog.io/@bang9dev/React-Native-Scrollable-Time-Picker-%EB%A7%8C%EB%93%A4%EA%B8%B01
-
-// 1. 현재 날짜에서 이동 안되는 문제 해결
-// 2. 현재 날짜 보여줄때 천천히 이동해서 그냥 바로 해당 위치로 뜨게 하고싶음
+// 처음 세팅은 오늘
+// 이후부터는 현재 값
 
 
-const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
-const months = Array.from({ length: 12 }, (_, i) => i + 1);
+const times = Array.from({ length: 24 }, (_, i) => i + 1);
 
 const BUTTON_HEIGHT = window.innerHeight * 0.065;
 const VIEW_HEIGHT = BUTTON_HEIGHT * 3;
@@ -26,14 +21,14 @@ const getCenterPositionFromIndex = (index) => {
 };
 
 
-export default function DateModal({ onSelectDate }) {
+export default function TimeModal({ onSelectTime }) {
 
   return (
     <View style={styles.view}>
-      <DatePicker
+      <TimePicker
         buttonHeight={BUTTON_HEIGHT}
         visibleCount={3}
-        onSelectDate ={onSelectDate}
+        onSelectTime ={onSelectTime}
       />
     </View>
   );
@@ -41,21 +36,36 @@ export default function DateModal({ onSelectDate }) {
 
 
 
-const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
+const TimePicker = ({ buttonHeight,visibleCount, onSelectTime }) => {
 
+  const options = {
+    hour: '2-digit',
+    hour12: false
+   };
+  
+  const time = new Date().toLocaleTimeString('ko-KR', options);
+  const currentTime = time.split('시')[0];
+  const [selectedTime, setSelectedTime] = useState(currentTime);
 
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [selectedDay, setSelectedDay] = useState(currentDay);
-  const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
+  const TimeIndex = currentTime - 1;
 
-  const refs = useRef(Array.from({ length: 3 }).map(() => React.createRef()));
+  const refs = useRef(Array.from({ length: 1 }).map(() => React.createRef()));
 
   const scrollY = useRef(new Animated.Value(0)).current;
+
+  const scrollToToday = () => {
+    if(refs.current[0]?.current){
+      refs.current[0]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(TimeIndex),
+        animated: true,
+      })
+    }
+  }
+
+  useEffect(()=>{
+    scrollToToday() 
+    console.log(TimeIndex)
+  }, [])
 
   const scrollToPosition = (position) => {
     Animated.spring(scrollY, {
@@ -64,79 +74,18 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
     }).start();
   };
 
-
-
-  useEffect(() => {
-    // 선택된 연도와 월에 맞는 최대 일수를 구함
-    const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-    setDays(Array.from({ length: daysInMonth }, (_, i) => i + 1));
-
-    // selectedDay가 그 월의 최대 일수를 초과하면, 최대 일수로 설정
-    if (selectedDay > daysInMonth) {
-      setSelectedDay(daysInMonth); // 초과하면 최대 일자로 설정
-    } else if (selectedDay < 1) {
-      setSelectedDay(1); // 1일 미만이면 1일로 설정
-    }
-  }, [selectedYear, selectedMonth]);
-
-  useEffect(() => {
-    // 오늘 날짜를 기반으로 연도, 월, 일을 설정
-    const todayYear = currentDate.getFullYear();
-    const todayMonth = currentDate.getMonth() + 1;
-    const todayDay = currentDate.getDate();
-
-  
-    // 선택된 날짜를 기준으로 스크롤을 설정
-    const todayYearIndex = years.indexOf(todayYear);
-    const todayMonthIndex = months.indexOf(todayMonth);
-    const todayDayIndex = todayDay - 1; // 0부터 시작하므로
-
-    console.log(todayYearIndex)
-    console.log(todayMonthIndex)
-    console.log(todayDayIndex)
-  
-    // refs가 준비된 이후에 스크롤을 실행
-    const scrollToToday = () => {
-      if (refs.current[0]?.current && refs.current[1]?.current && refs.current[2]?.current) {
-        refs.current[0]?.current?.scrollTo({
-          y: getCenterPositionFromIndex(todayYearIndex),
-          animated: true,
-        });
-        refs.current[1]?.current?.scrollTo({
-          y: getCenterPositionFromIndex(todayMonthIndex),
-          animated: true,
-        });
-        refs.current[2]?.current?.scrollTo({
-          y: getCenterPositionFromIndex(todayDayIndex),
-          animated: true,
-        });
-      }
-    };
-  
-    // 첫 번째 실행에서 scrollToToday 호출
-    scrollToToday();
-  
-  }, []);  // 상태값이 변경될 때만 실행
-
-
   const getOnScrollStop = (index) => (e) => {
     const offsetY = e.nativeEvent.contentOffset.y;
-    const CENTER_POSITION = getCenterPosition(offsetY); // 중앙 위치 계산
+    const CENTER_POSITION = getCenterPosition(offsetY)
     const actualIndex = Math.round(CENTER_POSITION / BUTTON_HEIGHT);
     scrollToPosition(CENTER_POSITION);
 
     let newSelectedValue;
 
     if (index === 0) {
-      newSelectedValue = years[actualIndex];
-      setSelectedYear(newSelectedValue);
-    } else if (index === 1) {
-      newSelectedValue = months[actualIndex];
-      setSelectedMonth(newSelectedValue);
-    } else if (index === 2) {
-      newSelectedValue = days[actualIndex];
-      setSelectedDay(newSelectedValue);
-    }
+      newSelectedValue = times[actualIndex];
+      setSelectedTime(newSelectedValue);
+    } 
 
     // 스크롤 위치 조정
     refs.current[index]?.current?.scrollTo({
@@ -144,11 +93,6 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
       animated: true,
     });
   };
-
-
-
-
-
 
   const getScrollProps = (index) => {
     return {
@@ -188,24 +132,9 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
   };
 
   const handleConfirm = () => {
-
-    let date = `${selectedYear}`;
-
-    if(selectedMonth.toString().length<2){
-      date += `-0${selectedMonth}`;
-    }else{
-      date += `-${selectedMonth}`;
-    }
-
-    if(selectedDay.toString().length<2){
-      date += `-0${selectedDay}`;
-    }else{
-      date += `-${selectedDay}`;
-    }
-    onSelectDate(date)
+    let time = `${selectedTime}`;
+    onSelectTime(time)
   };
-
-
 
 
   return (
@@ -227,57 +156,13 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
               style={[styles.row]}
             scrollEventThrottle={100}
             >
-              {fillEmpty(visibleCount, years).map((year, index) => (
-                year !== '' ? (
+              {fillEmpty(visibleCount, times).map((time, index) => (
+                time !== '' ? (
                   <CustomButton
-                    key={year}
-                    label={`${year}년`}
+                    key={time}
+                    label={`${time}시`}
                     onPress={getOnPress(0, index)}
-                    selected={year !== '' && year === selectedYear}
-                  />
-                ) : (
-                  <View style={styles.button} key={`empty-${index}`}>
-                    <Text style={styles.buttonLabel}></Text>
-                  </View>
-                )
-              ))}
-            </ScrollView>
-            <ScrollView {...scrollProps[1]}
-              onScroll={(e) => {
-                getOnScrollStop(1)(e);
-              }}
-              style={[styles.row]}
-            scrollEventThrottle={100}
-            >
-              {fillEmpty(visibleCount, months).map((month, index) => (
-                month !== '' ? (
-                  <CustomButton
-                    key={month}
-                    label={`${month}월`}
-                    onPress={getOnPress(1, index)}
-                    selected={month !== '' && month === selectedMonth}
-                  />
-                ) : (
-                  <View style={styles.button} key={`empty-${index}`}>
-                    <Text style={styles.buttonLabel}></Text>
-                  </View>
-                )
-              ))}
-            </ScrollView>
-            <ScrollView {...scrollProps[2]}
-              onScroll={(e) => {
-                getOnScrollStop(2)(e);
-              }}
-              style={[styles.row]}
-            scrollEventThrottle={100}
-            >
-              {fillEmpty(visibleCount, days).map((day, index) => (
-                day !== '' ? (
-                  <CustomButton
-                    key={day}
-                    label={`${day}일`}
-                    onPress={getOnPress(2, index)}
-                    selected={day !== '' && day === selectedDay}
+                    selected={time !== '' && time === selectedTime}
                   />
                 ) : (
                   <View style={styles.button} key={`empty-${index}`}>
@@ -289,7 +174,7 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
             <OverlayView />
           </View>
         </View>
-        <View style={styles.datemodalbutton}>
+        <View style={styles.timemodalbutton}>
           <TouchableWithoutFeedback onPress={handleConfirm}>
             <View style={styles.button}>
               <Text style={styles.buttontext}>확인</Text>
@@ -315,9 +200,6 @@ const OverlayView = () => (
   <View pointerEvents="none" style={[StyleSheet.absoluteFill, styles.overlay]}>
     <View style={styles.overlayVisibleView}>
       <View style={styles.overlayVisibleViewInner} />
-      <View style={[styles.overlayVisibleViewInner, { marginLeft: '2vw', marginRight: '2vw' }]} />
-      <View style={styles.overlayVisibleViewInner} />
-
     </View>
   </View>
 );
@@ -350,7 +232,7 @@ const styles = StyleSheet.create({
     marginTop: '3vw',
     marginBottom: '3vw'
   },
-  datemodalbutton: {
+  timemodalbutton: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -374,13 +256,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: '25vw',
+    fontSize: '20vw',
     height: '5vw',
     color: '#e5e7eb',
-    marginTop: '1vw',
+    marginTop: '1vw'
   },
   dashsize: {
-    fontSize: '25vw',
+    fontSize: '20vw',
   },
   view: {
     flex: 1,

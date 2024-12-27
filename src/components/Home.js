@@ -13,6 +13,7 @@ export default function Home() {
 
 const time = new Date().toLocaleTimeString('ko-KR', options);
 
+
  const navigate = useNavigate();
  const navigateToEnter = () =>{
      navigate('/ibk/entry/phoneVerification')
