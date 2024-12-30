@@ -66,3 +66,6 @@
 .entrymain-list-deletebutton:hover{
     background-color: #c2c5c9;
 }
+#entrymain-left{
+    margin-right: 2vw;
+}

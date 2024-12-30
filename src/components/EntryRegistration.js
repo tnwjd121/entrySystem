@@ -7,11 +7,20 @@ import DateModal from './DateModal';
 import { FaRegCalendar } from "react-icons/fa6";
 import { IoMdTime } from "react-icons/io";
 import TimeModal from './TimeModal';
+import { FaPlus } from "react-icons/fa6";
 
-export default function EntryRegistration({toggleEntryRegistration}) {
+export default function EntryRegistration({toggleEntryRegistration, fetchList, entryCount}) {
     const API_URL = "http://localhost:5000"
 
-    // 휴대폰 인증 정보 가져오기
+    // 수정 필요
+    // 1. 휴대폰 인증정보 처음 세팅 한번만 가져오기 추가할 경우 초기화 되어야함
+
+    // 2. 2번째 이후 출일입시랑 목적 동일하면 복사해서 가져오도록 하기(이전 데이터 가져오기)
+    // => +버튼을 누를 갯수가 필요함 
+    
+    // 3. 신청 완료페이지, 오류페이지, 관리자 문의 페이지 만들기
+
+
     const location = useLocation();
     const { verificationData } = location.state || {};
 
@@ -24,22 +33,34 @@ export default function EntryRegistration({toggleEntryRegistration}) {
         entryTime: "",
         purpose: "",
         callNumber: "",
+        createdDate: ""
+        
     };
 
     // entryregistrationData 상태 정의
     const [entryregistrationData, setEntryregistrationData] = useState(initialState);
     const [verificationState, setVerificationState] = useState(verificationData);
 
+    
+
+
     // verificationData를 초기화
     useEffect(() => {
-        if (verificationState) {
+        console.log(entryCount)
+        if (entryCount==1) {
             setEntryregistrationData({
                 ...initialState,
                 name: verificationState?.name || "",
                 callNumber: verificationState?.callNumber || "",
             });
+        }else if(entryCount > 1) {
+            setEntryregistrationData({
+                ...initialState
+            })
+            fetchPreviousEntryData();
         }
-    }, [verificationState]);
+
+    }, []);
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -49,16 +70,39 @@ export default function EntryRegistration({toggleEntryRegistration}) {
         }));
     };
 
+    const fetchPreviousEntryData = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/entrylist`);
+            const latestEntry = response.data.reduce((latest, current) => {
+                return new Date(latest.createdDate) > new Date(current.createdDate) ? latest : current;
+            });
+            console.log(latestEntry)
+        } catch (error) {
+            console.error("이전 데이터 가져오기 에러:", error);
+        }
+    };
+
+
+
+
     const addSubmit = async () => {
         if(isFormComplete()) {
+            const currentDate = new Date().toISOString();
+            const dataToSubmit = {
+                ...entryregistrationData,
+                createdDate: currentDate
+            };
             try {
                 // 서버로 데이터 전송
-                await axios.post(`${API_URL}/entrylist`, entryregistrationData);
-                console.log("등록된 데이터:", entryregistrationData);
+                await axios.post(`${API_URL}/entrylist`, dataToSubmit);
+                console.log("등록된 데이터:", dataToSubmit);
     
                 // 데이터 초기화
                 setEntryregistrationData(initialState); // 폼 초기화
                 setVerificationState(null); // verificationState 초기화
+                console.log(verificationState)
+
+                fetchList();
             } catch (error) {
                 console.error("등록 에러 발생:", error);
             }
@@ -69,6 +113,7 @@ export default function EntryRegistration({toggleEntryRegistration}) {
     const handleClose = () => {
         toggleEntryRegistration(); // 부모 컴포넌트에서 닫기 처리
         setVerificationState(null); // verificationState 초기화
+        console.log(verificationState)
     };
 
 
@@ -144,6 +189,7 @@ export default function EntryRegistration({toggleEntryRegistration}) {
                     </label>
                 </div>
                 <div id='entryregistration-input-entrydate'>
+                    <div id='entryregistration-prevButton'><FaPlus />이전 출입 일시/목적 불러오기</div>
                     <label>
                         <span id='entryregistration-input-title'>출입일시</span><br />
                         <div id='entryregistration-input-entryday-flex'>

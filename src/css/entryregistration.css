@@ -102,3 +102,12 @@ hr {
     width: 38vw;
     border-bottom: 0.3vw solid rgb(172, 172, 172);
 }
+#entryregistration-prevButton{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    background-color: #2150b2;
+    width: 65vw;
+
+
+}

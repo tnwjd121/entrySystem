@@ -11,22 +11,25 @@ export default function EntryMain() {
   const API_URL = "http://localhost:5000"
 
   const [isOpen, setIsOpen] = useState(false);
-
+  
   const toggleEntryRegistration = () => {
     setIsOpen(!isOpen); 
   };
   
   // 목서버 데이터 가져오기
   const [entryList, setEntryList]= useState([]);
-
+  
   useEffect(()=>{
     fetchList()
   }, [])
+  
+  const [entryCount, setEntryCount] = useState(0); 
 
   const fetchList =  async () => {
     try {
       const response = await axios.get(`${API_URL}/entrylist`)
       setEntryList(response.data)
+      console.log(entryCount)
     } catch (error) {
       console.error("에러발생")
     }
@@ -34,19 +37,16 @@ export default function EntryMain() {
 
 
   const [openDelete, setOpenDelete] = useState(false);
+  const [deleteId, setDeleteId] = useState(null);
 
-  const isOpenDelete = (()=>{
-      setOpenDelete(!openDelete)
-      console.log(openDelete)
-  })
+  const isOpenDelete = (id)=>{
+      setOpenDelete(true)
+      setDeleteId(id)
+  }
 
-  // 전화번호 가져올때 양식 - - 반영
-  // 수정버튼 모달
-  // 삭제 버튼, 삭제 전 경고창 띄우고 ok누르면 삭제
-
-
-  
-
+  const isCloseDelete = () =>{
+    setOpenDelete(false)
+  }
 
   return (
     <div id='entrymain-body'>
@@ -56,7 +56,7 @@ export default function EntryMain() {
         <div id='entrymain-title'>
           출입 등록 현황({entryList.length})
         </div>
-        <div id='entrymain-button'onClick={toggleEntryRegistration}>
+        <div id='entrymain-button'onClick={() => { toggleEntryRegistration(); setEntryCount(entryCount + 1); }}>
           <LuPlus/>
         </div>
       </div>
@@ -64,10 +64,10 @@ export default function EntryMain() {
       <div id='entrymain-list' key={entry.id}>
         <div id='entrymain-list-top'>
           <div id='entrymain-list-row'>
-            <div id='entrymain-left'>고객사명: {entry.clientName}</div>
+            <div id='entrymain-text'>고객사명: {entry.clientName}</div>
           </div>
           <div id='entrymain-list-row'>
-            <div id='entrymain-right'>협력업체: {entry.partnerCompany}</div>
+            <div id='entrymain-text'>협력업체: {entry.partnerCompany}</div>
           </div>
           <div id='entrymain-list-row'>
             <div id='entrymain-left'>성명: {entry.name}</div>
@@ -84,14 +84,14 @@ export default function EntryMain() {
           </div>
         </div>
         <div id='entrymain-list-bottom'>
-          <div className='entrymain-list-button entrymain-list-editbutton' onClick={isOpenDelete}>수정</div>
-          <div className='entrymain-list-button entrymain-list-deletebutton'>삭제</div>
+          <div className='entrymain-list-button entrymain-list-editbutton' fetchList={fetchList}>수정</div>
+          <div className='entrymain-list-button entrymain-list-deletebutton' onClick={()=>isOpenDelete(entry.id)}>삭제</div>
         </div>
       </div>
       ))}
-      {isOpen && <EntryRegistration  toggleEntryRegistration={toggleEntryRegistration}/>}
-      {isOpenDelete ? <DeleteConfirmModal isOpenDelete={isOpenDelete}/> : null}
+      {isOpen && <EntryRegistration  toggleEntryRegistration={toggleEntryRegistration} fetchList={fetchList} entryCount={entryCount}/>}
+      {openDelete ? <DeleteConfirmModal fetchList={fetchList} isCloseDelete={isCloseDelete} deleteId={deleteId}/> : null}
     </div>
-    // 삭제가 모달창이 계속 떠 있음 수정필요
+
   )
 }

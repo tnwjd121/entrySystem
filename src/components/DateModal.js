@@ -90,10 +90,6 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
     const todayYearIndex = years.indexOf(todayYear);
     const todayMonthIndex = months.indexOf(todayMonth);
     const todayDayIndex = todayDay - 1; // 0부터 시작하므로
-
-    console.log(todayYearIndex)
-    console.log(todayMonthIndex)
-    console.log(todayDayIndex)
   
     // refs가 준비된 이후에 스크롤을 실행
     const scrollToToday = () => {
