@@ -29,7 +29,6 @@ export default function EntryMain() {
     try {
       const response = await axios.get(`${API_URL}/entrylist`)
       setEntryList(response.data)
-      console.log(entryCount)
     } catch (error) {
       console.error("에러발생")
     }

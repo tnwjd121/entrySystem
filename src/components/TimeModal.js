@@ -3,25 +3,21 @@ import { Animated, Button, ScrollView, Text, View, TouchableWithoutFeedback, Sty
 import { GoDash } from "react-icons/go";
 import { debounce } from 'lodash';
 
-// 처음 세팅은 오늘
-// 이후부터는 현재 값
-
+// 1. 스크롤로 시간 선택하고, 다시 시간 눌렀을때 해당하는 위치로 안가짐
+ 
 
 const times = Array.from({ length: 24 }, (_, i) => i + 1);
-
 const BUTTON_HEIGHT = window.innerHeight * 0.065;
 const VIEW_HEIGHT = BUTTON_HEIGHT * 3;
 
 const getCenterPosition = (offsetY) => {
   return Math.round(offsetY / BUTTON_HEIGHT) * BUTTON_HEIGHT;
 };
-
 const getCenterPositionFromIndex = (index) => {
   return index * BUTTON_HEIGHT;
 };
 
-
-export default function TimeModal({ onSelectTime }) {
+export default function TimeModal({timeCount, selectedTime, setSelectedTime, handleCloseModal}) {
 
   return (
     <View style={styles.view}>
@@ -29,14 +25,13 @@ export default function TimeModal({ onSelectTime }) {
         buttonHeight={BUTTON_HEIGHT}
         visibleCount={3}
         onSelectTime ={onSelectTime}
+        timeCount = {timeCount}
       />
     </View>
   );
 }
 
-
-
-const TimePicker = ({ buttonHeight,visibleCount, onSelectTime }) => {
+const TimePicker = ({ visibleCount, timeCount }) => {
 
   const options = {
     hour: '2-digit',
@@ -45,27 +40,46 @@ const TimePicker = ({ buttonHeight,visibleCount, onSelectTime }) => {
   
   const time = new Date().toLocaleTimeString('ko-KR', options);
   const currentTime = time.split('시')[0];
-  const [selectedTime, setSelectedTime] = useState(currentTime);
-
-  const TimeIndex = currentTime - 1;
+  const [selectedTime, setSelectedTime] = useState(0);
+  const TodayIndex = currentTime - 1;
+  const TimeIndex = selectedTime -1;
+  console.log("스크롤 선택", TimeIndex)
 
   const refs = useRef(Array.from({ length: 1 }).map(() => React.createRef()));
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
+  // 기본 오늘 날짜로 고정 
   const scrollToToday = () => {
     if(refs.current[0]?.current){
       refs.current[0]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(TodayIndex),
+        animated: false,
+      })
+    }
+  }
+  // 선택한 날짜로 열기
+  const scrollToSelect = () => {
+    console.log(selectedTime)
+    if(refs.current[0]?.current){
+      refs.current[0]?.current?.scrollTo({
         y: getCenterPositionFromIndex(TimeIndex),
-        animated: true,
+        animated: false,
       })
     }
   }
 
+  //오늘 날짜 보여주기
   useEffect(()=>{
-    scrollToToday() 
-    console.log(TimeIndex)
-  }, [])
+    if(timeCount==1) {
+      scrollToToday()
+    }else if(timeCount > 1){
+      console.log("useEffect index", TimeIndex)
+      console.log("useEffect time", selectedTime)
+      scrollToSelect()
+    }
+    console.log(timeCount)
+  }, [timeCount, selectedTime])
 
   const scrollToPosition = (position) => {
     Animated.spring(scrollY, {
@@ -85,6 +99,7 @@ const TimePicker = ({ buttonHeight,visibleCount, onSelectTime }) => {
     if (index === 0) {
       newSelectedValue = times[actualIndex];
       setSelectedTime(newSelectedValue);
+      console.log("확인중", newSelectedValue )
     } 
 
     // 스크롤 위치 조정
@@ -134,6 +149,8 @@ const TimePicker = ({ buttonHeight,visibleCount, onSelectTime }) => {
   const handleConfirm = () => {
     let time = `${selectedTime}`;
     onSelectTime(time)
+    console.log(selectedTime)
+    
   };
 
 

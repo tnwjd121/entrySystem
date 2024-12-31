@@ -36,7 +36,7 @@ hr {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    height: 130vw;
+    height: 140vw;
 }
 
 #entryregistration-input input {
@@ -104,10 +104,24 @@ hr {
 }
 #entryregistration-prevButton{
     display: flex;
-    justify-content: right;
+    justify-content: center;
     align-items: center;
-    background-color: #2150b2;
-    width: 65vw;
-
-
+    background-color: #5c87e4;
+    width: 70vw;
+    color: #ffffff;
+    border-radius: 5vw;
+    padding: 1vw;
+    margin-left: 10%;
+    margin-bottom: 2vw;
+}
+#entryregistration-prevButton-icon{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1vw;
+}
+#entryregistration-prevButton-text{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

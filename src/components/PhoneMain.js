@@ -124,7 +124,12 @@ export default function PhoneMain() {
             <span id='phonemain-input-title'>휴대폰번호</span><br />
             <div id='phonemain-input-phoneNumber-input'>
               {/* 통신사 버튼 클릭 시 키보드 제거 */}
-              <div id='carrier' onClick={() => setOpenCarrierModal(true)}>{verificationData.carrier || "통신사"} <IoIosArrowDown /></div>
+              <div id='carrier' 
+              onClick={() => setOpenCarrierModal(true)}
+              // 수정필요
+              style={{color: verificationData.carrier==='' ? "#868686" : "#000000" }}
+              >
+                {verificationData.carrier || "통신사"} <IoIosArrowDown /></div>
               <div id='phonemain-input-callnumber'>
                 <input 
                   onInput={handleInput}

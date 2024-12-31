@@ -13,10 +13,10 @@ export default function EntryRegistration({toggleEntryRegistration, fetchList, e
     const API_URL = "http://localhost:5000"
 
     // 수정 필요
-    // 1. 휴대폰 인증정보 처음 세팅 한번만 가져오기 추가할 경우 초기화 되어야함
+    // 1. 휴대폰 인증정보 처음 세팅 한번만 가져오기 추가할 경우 초기화 되어야함 -> 해결
 
     // 2. 2번째 이후 출일입시랑 목적 동일하면 복사해서 가져오도록 하기(이전 데이터 가져오기)
-    // => +버튼을 누를 갯수가 필요함 
+    // => 2번째 이후부터 버튼 추가하고, 추가하면 -> 해결
     
     // 3. 신청 완료페이지, 오류페이지, 관리자 문의 페이지 만들기
 
@@ -37,9 +37,10 @@ export default function EntryRegistration({toggleEntryRegistration, fetchList, e
         
     };
 
-    // entryregistrationData 상태 정의
     const [entryregistrationData, setEntryregistrationData] = useState(initialState);
     const [verificationState, setVerificationState] = useState(verificationData);
+    const [prevData, setPrevData] = useState("");
+    const [timeCount, setTimeCount] = useState(0);
 
     
 
@@ -62,6 +63,16 @@ export default function EntryRegistration({toggleEntryRegistration, fetchList, e
 
     }, []);
 
+    // 출입일시
+    const prevButton = () => {
+        setEntryregistrationData({
+            ...initialState,
+            entryDate: prevData?.entryDate || "",
+            entryTime: prevData?.entryTime || "",
+            purpose: prevData?.purpose || "",
+        })
+    }
+
     const handleChange = (e) => {
         const { id, value } = e.target;
         setEntryregistrationData((prev) => ({
@@ -76,7 +87,7 @@ export default function EntryRegistration({toggleEntryRegistration, fetchList, e
             const latestEntry = response.data.reduce((latest, current) => {
                 return new Date(latest.createdDate) > new Date(current.createdDate) ? latest : current;
             });
-            console.log(latestEntry)
+            setPrevData(latestEntry)
         } catch (error) {
             console.error("이전 데이터 가져오기 에러:", error);
         }
@@ -130,10 +141,17 @@ export default function EntryRegistration({toggleEntryRegistration, fetchList, e
 
     const [openTime, setOpentime] = useState(false);
 
-    const isOpenTime = () => {
+    function isOpenTime() {
         setOpentime(!openTime)
     }
 
+
+    const [selectedTime, setSelectedTime] = useState(0);
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+      };
+
+    // 수정필요
     const handleTimeSelect = (time) => {
         setEntryregistrationData((prev) => ({...prev, entryTime: time}))
         setOpentime(!openTime)
@@ -189,7 +207,16 @@ export default function EntryRegistration({toggleEntryRegistration, fetchList, e
                     </label>
                 </div>
                 <div id='entryregistration-input-entrydate'>
-                    <div id='entryregistration-prevButton'><FaPlus />이전 출입 일시/목적 불러오기</div>
+                    { entryCount>1? 
+                    (
+                    <div id='entryregistration-prevButton' onClick={prevButton}>
+                        <div id='entryregistration-prevButton-icon'><FaPlus/></div>
+                        <div id='entryregistration-prevButton-text'>이전 출입 일시/목적 불러오기</div>
+                    </div>
+                    )
+                    :
+                    null
+                    }
                     <label>
                         <span id='entryregistration-input-title'>출입일시</span><br />
                         <div id='entryregistration-input-entryday-flex'>
@@ -199,12 +226,20 @@ export default function EntryRegistration({toggleEntryRegistration, fetchList, e
                             </div>
                             {openDate?<DateModal onSelectDate={handleDateSelect}/>:null }
                             {/* 시간만 나오게 하고, 스크롤 형식  */}
-                            <div id='entryTime' onClick={isOpenTime}>
+                            <div id='entryTime' onClick={() => {isOpenTime(); setTimeCount(timeCount + 1)}}>
                                 <div>{`${entryregistrationData.entryTime}시 `||"시간"}</div>
                                 <div><IoMdTime /></div>
                             </div>
-                            {openTime?<TimeModal onSelectTime={handleTimeSelect}/>:null }
-                            {/* <input type='time' id='entryTime' placeholder='출입시간'onChange={handleChange} value={entryregistrationData.entryTime}/> */}
+                            {openTime
+                            ?
+                            <TimeModal 
+                                timeCount={timeCount}
+                                selectedTime={selectedTime}
+                                setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
+                                onClose={handleCloseModal}
+                            />
+                            :
+                            null }
                         </div>
                     </label>
                 </div>
