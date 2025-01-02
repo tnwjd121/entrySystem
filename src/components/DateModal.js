@@ -6,34 +6,35 @@ import { debounce } from 'lodash';
 // 참고
 //https://velog.io/@bang9dev/React-Native-Scrollable-Time-Picker-%EB%A7%8C%EB%93%A4%EA%B8%B01
 
-// 1. 현재 날짜에서 이동 안되는 문제 해결
-// 2. 현재 날짜 보여줄때 천천히 이동해서 그냥 바로 해당 위치로 뜨게 하고싶음
-
 
 const currentYear = new Date().getFullYear();
 const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
-
 const BUTTON_HEIGHT = window.innerHeight * 0.065;
 const VIEW_HEIGHT = BUTTON_HEIGHT * 3;
 
 const getCenterPosition = (offsetY) => {
   return Math.round(offsetY / BUTTON_HEIGHT) * BUTTON_HEIGHT;
 };
-
-const getCenterPositionFromIndex = (index) => {
+const getCenterPositionFromIndex = (index) =>  {
   return index * BUTTON_HEIGHT;
 };
 
-
-export default function DateModal({ onSelectDate }) {
+export default function DateModal({onClose,dateCount,selectedYear,setSelectedYear,selectedMonth,setSelectedMonth,selectedDay,setSelectedDay}) {
 
   return (
     <View style={styles.view}>
       <DatePicker
         buttonHeight={BUTTON_HEIGHT}
         visibleCount={3}
-        onSelectDate ={onSelectDate}
+        onClose ={onClose}
+        dateCount ={dateCount}
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        selectedMonth={selectedMonth}
+        setSelectedMonth={setSelectedMonth}
+        selectedDay={selectedDay}
+        setSelectedDay={setSelectedDay}
       />
     </View>
   );
@@ -41,79 +42,99 @@ export default function DateModal({ onSelectDate }) {
 
 
 
-const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const currentMonth = currentDate.getMonth() + 1;
-  const currentDay = currentDate.getDate();
+const DatePicker = ({dateCount, visibleCount, onClose, selectedYear,setSelectedYear, selectedMonth, setSelectedMonth, selectedDay, setSelectedDay }) => {
 
-
-  const [selectedYear, setSelectedYear] = useState(currentYear);
-  const [selectedMonth, setSelectedMonth] = useState(currentMonth);
-  const [selectedDay, setSelectedDay] = useState(currentDay);
+  // 데이터 저장
   const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
+
+  // 현재 날짜
+  const todayDate = new Date();
+  const currentYear = todayDate.getFullYear();
+  const currentMonth = todayDate.getMonth() + 1;
+  const currentDay = todayDate.getDate();
+
+  const todayYearIndex = years.findIndex((y) => y === currentYear);
+  const todayMonthIndex = currentMonth - 1;
+  const todayDayIndex = currentDay - 1;
+  
+  // 년도
+  const yearIndex = years.findIndex((y) => y === selectedYear) ;
+  const monthIndex = selectedMonth -1 ;
+  const dayIndex = selectedDay -1 ;
+
+
 
   const refs = useRef(Array.from({ length: 3 }).map(() => React.createRef()));
 
   const scrollY = useRef(new Animated.Value(0)).current;
 
+  // 오늘 날짜 스크롤
+  const scrollToToday = () => {
+    if (refs.current[0]?.current && refs.current[1]?.current && refs.current[2]?.current) {
+      refs.current[0]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(todayYearIndex),
+        animated: false,
+      });
+      refs.current[1]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(todayMonthIndex),
+        animated: false,
+      });
+      refs.current[2]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(todayDayIndex),
+        animated: false,
+      });
+    }
+  };
+
+  // 선택한 날짜로 열기
+  const scrollToSelect = () => {
+    if (refs.current[0]?.current && refs.current[1]?.current && refs.current[2]?.current) {
+      refs.current[0]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(yearIndex),
+        animated: false,
+      });
+      refs.current[1]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(monthIndex),
+        animated: false,
+      });
+      refs.current[2]?.current?.scrollTo({
+        y: getCenterPositionFromIndex(dayIndex),
+        animated: false,
+      });
+    }
+  };
+
+  useEffect(()=>{
+    if(dateCount==1) {
+      scrollToToday()
+
+    // 상태 초기화 (오늘 날짜로 설정)
+    setSelectedYear(currentYear);
+    setSelectedMonth(currentMonth);
+    setSelectedDay(currentDay);
+
+    }else if(dateCount > 1){
+      scrollToSelect()
+    }
+  },[dateCount])
+
+  useEffect(() => {
+    const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
+    setDays(Array.from({ length: daysInMonth }, (_, i) => i + 1));
+
+    if (selectedDay > daysInMonth) {
+      setSelectedDay(daysInMonth); 
+    } else if (selectedDay < 1) {
+      setSelectedDay(1); 
+    }
+  }, [selectedYear, selectedMonth]);
+  
   const scrollToPosition = (position) => {
     Animated.spring(scrollY, {
       toValue: position,
       useNativeDriver: true,
     }).start();
   };
-
-
-
-  useEffect(() => {
-    // 선택된 연도와 월에 맞는 최대 일수를 구함
-    const daysInMonth = new Date(selectedYear, selectedMonth, 0).getDate();
-    setDays(Array.from({ length: daysInMonth }, (_, i) => i + 1));
-
-    // selectedDay가 그 월의 최대 일수를 초과하면, 최대 일수로 설정
-    if (selectedDay > daysInMonth) {
-      setSelectedDay(daysInMonth); // 초과하면 최대 일자로 설정
-    } else if (selectedDay < 1) {
-      setSelectedDay(1); // 1일 미만이면 1일로 설정
-    }
-  }, [selectedYear, selectedMonth]);
-
-  useEffect(() => {
-    // 오늘 날짜를 기반으로 연도, 월, 일을 설정
-    const todayYear = currentDate.getFullYear();
-    const todayMonth = currentDate.getMonth() + 1;
-    const todayDay = currentDate.getDate();
-
-  
-    // 선택된 날짜를 기준으로 스크롤을 설정
-    const todayYearIndex = years.indexOf(todayYear);
-    const todayMonthIndex = months.indexOf(todayMonth);
-    const todayDayIndex = todayDay - 1; // 0부터 시작하므로
-  
-    // refs가 준비된 이후에 스크롤을 실행
-    const scrollToToday = () => {
-      if (refs.current[0]?.current && refs.current[1]?.current && refs.current[2]?.current) {
-        refs.current[0]?.current?.scrollTo({
-          y: getCenterPositionFromIndex(todayYearIndex),
-          animated: true,
-        });
-        refs.current[1]?.current?.scrollTo({
-          y: getCenterPositionFromIndex(todayMonthIndex),
-          animated: true,
-        });
-        refs.current[2]?.current?.scrollTo({
-          y: getCenterPositionFromIndex(todayDayIndex),
-          animated: true,
-        });
-      }
-    };
-  
-    // 첫 번째 실행에서 scrollToToday 호출
-    scrollToToday();
-  
-  }, []);  // 상태값이 변경될 때만 실행
-
 
   const getOnScrollStop = (index) => (e) => {
     const offsetY = e.nativeEvent.contentOffset.y;
@@ -141,11 +162,6 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
     });
   };
 
-
-
-
-
-
   const getScrollProps = (index) => {
     return {
       showsVerticalScrollIndicator: false,
@@ -153,7 +169,7 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
       onScrollBeginDrag: () => {
       },
       onScrollEndDrag: (e) => {
-        getOnScrollStop(index)(e); // 직접 이벤트 처리
+        getOnScrollStop(index)(e);
       },
       onMomentumScrollBegin: () => {
       },
@@ -183,25 +199,10 @@ const DatePicker = ({ buttonHeight,visibleCount, onSelectDate }) => {
     scrollProps[scrollViewIdx].ref.current.scrollTo({ y: CENTER_POSITION });
   };
 
+  
   const handleConfirm = () => {
-
-    let date = `${selectedYear}`;
-
-    if(selectedMonth.toString().length<2){
-      date += `-0${selectedMonth}`;
-    }else{
-      date += `-${selectedMonth}`;
-    }
-
-    if(selectedDay.toString().length<2){
-      date += `-0${selectedDay}`;
-    }else{
-      date += `-${selectedDay}`;
-    }
-    onSelectDate(date)
+    onClose();
   };
-
-
 
 
   return (

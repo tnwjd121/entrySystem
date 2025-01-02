@@ -3,7 +3,7 @@ import { Animated, Button, ScrollView, Text, View, TouchableWithoutFeedback, Sty
 import { GoDash } from "react-icons/go";
 import { debounce } from 'lodash';
 
-// 1. 스크롤로 시간 선택하고, 다시 시간 눌렀을때 해당하는 위치로 안가짐
+// 1. 스크롤 부드럽게 안됨
  
 
 const times = Array.from({ length: 24 }, (_, i) => i + 1);
@@ -17,33 +17,33 @@ const getCenterPositionFromIndex = (index) => {
   return index * BUTTON_HEIGHT;
 };
 
-export default function TimeModal({timeCount, selectedTime, setSelectedTime, handleCloseModal}) {
+export default function TimeModal({timeCount, selectedTime, setSelectedTime, onClose}) {
 
   return (
     <View style={styles.view}>
       <TimePicker
         buttonHeight={BUTTON_HEIGHT}
         visibleCount={3}
-        onSelectTime ={onSelectTime}
         timeCount = {timeCount}
+        selectedTime={selectedTime}
+        setSelectedTime={setSelectedTime}
+        onClose={onClose}
       />
     </View>
   );
 }
 
-const TimePicker = ({ visibleCount, timeCount }) => {
+const TimePicker = ({ visibleCount, timeCount, setSelectedTime, selectedTime, onClose }) => {
 
   const options = {
     hour: '2-digit',
     hour12: false
    };
   
-  const time = new Date().toLocaleTimeString('ko-KR', options);
-  const currentTime = time.split('시')[0];
-  const [selectedTime, setSelectedTime] = useState(0);
+  const todayTime = new Date().toLocaleTimeString('ko-KR', options);
+  const currentTime = todayTime.split('시')[0];
   const TodayIndex = currentTime - 1;
   const TimeIndex = selectedTime -1;
-  console.log("스크롤 선택", TimeIndex)
 
   const refs = useRef(Array.from({ length: 1 }).map(() => React.createRef()));
 
@@ -60,7 +60,6 @@ const TimePicker = ({ visibleCount, timeCount }) => {
   }
   // 선택한 날짜로 열기
   const scrollToSelect = () => {
-    console.log(selectedTime)
     if(refs.current[0]?.current){
       refs.current[0]?.current?.scrollTo({
         y: getCenterPositionFromIndex(TimeIndex),
@@ -74,12 +73,9 @@ const TimePicker = ({ visibleCount, timeCount }) => {
     if(timeCount==1) {
       scrollToToday()
     }else if(timeCount > 1){
-      console.log("useEffect index", TimeIndex)
-      console.log("useEffect time", selectedTime)
       scrollToSelect()
     }
-    console.log(timeCount)
-  }, [timeCount, selectedTime])
+  }, [timeCount])
 
   const scrollToPosition = (position) => {
     Animated.spring(scrollY, {
@@ -99,7 +95,6 @@ const TimePicker = ({ visibleCount, timeCount }) => {
     if (index === 0) {
       newSelectedValue = times[actualIndex];
       setSelectedTime(newSelectedValue);
-      console.log("확인중", newSelectedValue )
     } 
 
     // 스크롤 위치 조정
@@ -116,7 +111,7 @@ const TimePicker = ({ visibleCount, timeCount }) => {
       onScrollBeginDrag: () => {
       },
       onScrollEndDrag: (e) => {
-        getOnScrollStop(index)(e); // 직접 이벤트 처리
+        getOnScrollStop(index)(e);
       },
       onMomentumScrollBegin: () => {
       },
@@ -147,10 +142,8 @@ const TimePicker = ({ visibleCount, timeCount }) => {
   };
 
   const handleConfirm = () => {
-    let time = `${selectedTime}`;
-    onSelectTime(time)
     console.log(selectedTime)
-    
+    onClose();
   };
 
 
@@ -162,7 +155,7 @@ const TimePicker = ({ visibleCount, timeCount }) => {
           <GoDash style={styles.dashsize} />
         </View>
         <View >
-          <Text style={styles.title}>출입날짜</Text>
+          <Text style={styles.title}>출입시간</Text>
         </View>
         <View style={styles.view}>
           <View style={[styles.container]}>

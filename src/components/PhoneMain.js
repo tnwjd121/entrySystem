@@ -18,7 +18,7 @@ export default function PhoneMain() {
     gender: "",
     genderText: "",
     callNumber: "",
-    carrier:""
+    carrier: ""
   });
 
   const [agreementStatus, setAgreementStatus] = useState({
@@ -77,7 +77,7 @@ export default function PhoneMain() {
   };
 
   function numberMax(e) {
-    if(e.target.value.length > e.target.maxLength){
+    if (e.target.value.length > e.target.maxLength) {
       e.target.value = e.target.value.slice(0, e.target.maxLength)
     }
   }
@@ -106,15 +106,15 @@ export default function PhoneMain() {
           <label>
             <span id='phonemain-input-title'>생년월일/성별</span><br />
             <div id='phonemain-input-registNumber-input'>
-              <input 
+              <input
                 onInput={handleInput}
-              type='number' id='birth' placeholder='생년월일' maxLength={6} onChange={handleChange}
+                type='number' id='birth' placeholder='생년월일' maxLength={6} onChange={handleChange}
               />
               <div id='hyphen'><FaMinus /></div>
-              <input 
+              <input
                 onInput={handleInput}
                 type='number' id='gender' placeholder='●' maxLength={1} onChange={handleChange}
-                />
+              />
               <p>●●●●●●</p>
             </div>
           </label>
@@ -124,16 +124,15 @@ export default function PhoneMain() {
             <span id='phonemain-input-title'>휴대폰번호</span><br />
             <div id='phonemain-input-phoneNumber-input'>
               {/* 통신사 버튼 클릭 시 키보드 제거 */}
-              <div id='carrier' 
-              onClick={() => setOpenCarrierModal(true)}
-              // 수정필요
-              style={{color: verificationData.carrier==='' ? "#868686" : "#000000" }}
+              <button id='carrier'
+                onClick={() => setOpenCarrierModal(true)}
+                style={{ color: verificationData.carrier === '' ? "#868686" : "#000000" }}
               >
-                {verificationData.carrier || "통신사"} <IoIosArrowDown /></div>
+                {verificationData.carrier || "통신사"} <IoIosArrowDown /></button>
               <div id='phonemain-input-callnumber'>
-                <input 
+                <input
                   onInput={handleInput}
-                type='number' id='callNumber' placeholder='휴대폰번호 (숫자만)' maxLength={11}  onChange={handleChange} />
+                  type='number' id='callNumber' placeholder='휴대폰번호 (숫자만)' maxLength={11} onChange={handleChange} />
               </div>
             </div>
           </label>
