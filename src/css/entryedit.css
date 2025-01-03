@@ -1,0 +1,104 @@
+#entryedit-body{
+    position: fixed;
+    top: 0;
+    background-color: #ffffff;
+    width: 100%;
+    height: 100%;
+}
+#entryedit-top{
+    display: flex;
+    align-items: center;
+    height: 14vw;
+}
+#entryedit-closebutton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #3579f6;
+    margin-left: 4vw;
+    font-size: 7vw;
+}
+hr {
+    margin: 0;
+}
+
+#entryedit-title{
+    font-family: 'PretendardMedium';
+    text-align: center;
+    font-size: 5.5vw;
+    /* 옆 상관없이  전체 가운데 정렬 */
+    margin-left: 29vw;
+}
+#entryedit-input{
+    padding-top: 5vw;
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 140vw;
+}
+
+#entryedit-input input {
+    border: none;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
+    font-family: 'PretendardLight';
+    outline: none;
+    background: none;
+    font-size: 4.5vw;
+    font-family: 'PretendardRegular';
+}
+
+#entryedit-input input:focus {
+    border-bottom: 0.3vw solid #2150b2; 
+}
+
+#entryedit-input-title{
+    font-family: 'PretendardLight';
+    font-size: 4vw;
+}
+
+#clientName, #partnerCompany, #position, #name, #purpose, #callNumber{
+    width: 80vw;
+}
+
+#entryedit-input-entryday-flex{
+    display: flex;
+
+}
+
+#entryedit-entrybutton{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'PretendardMedium';
+    font-size: 5vw;
+    color: #ffffff;
+    height: 10vw;
+    margin: 0 auto;
+    margin-top: 5vw;
+    border-radius: 2vw;
+    height: 15vw;
+    /* position: fixed; */
+    width: 90%;
+    left: 5%;
+    bottom: 5%;
+    z-index: 5;
+}
+#entryDate{
+    display: flex;
+    justify-content: space-between;
+    width: 38vw;
+    font-family: 'PretendardLight';
+    font-size: 4.5vw;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
+    margin-right: 4vw;
+}
+#entryTime{
+    display: flex;
+    justify-content: space-between;
+    font-family: 'PretendardLight';
+    font-size: 4.5vw;
+    width: 38vw;
+    border-bottom: 0.3vw solid rgb(172, 172, 172);
+}

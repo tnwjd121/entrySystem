@@ -4,6 +4,7 @@ import { LuPlus } from "react-icons/lu";
 import EntryRegistration from './EntryRegistration';
 import axios from 'axios';
 import DeleteConfirmModal from './DeleteConfirmModal';
+import EntryEdit from './EntryEdit';
 
 
 export default function EntryMain() {
@@ -12,12 +13,13 @@ export default function EntryMain() {
 
   const [isOpen, setIsOpen] = useState(false);
   
-  const toggleEntryRegistration = () => {
+  const openEntryRegistration = () => {
     setIsOpen(!isOpen); 
   };
   
   // 목서버 데이터 가져오기
   const [entryList, setEntryList]= useState([]);
+  const [entryData, setEntryData]= useState([]);
   
   useEffect(()=>{
     fetchList()
@@ -36,15 +38,48 @@ export default function EntryMain() {
 
 
   const [openDelete, setOpenDelete] = useState(false);
-  const [deleteId, setDeleteId] = useState(null);
+  const [entryId, setEntryId] = useState(null);
 
   const isOpenDelete = (id)=>{
       setOpenDelete(true)
-      setDeleteId(id)
+      setEntryId(id)
   }
 
   const isCloseDelete = () =>{
     setOpenDelete(false)
+  }
+
+  const [openEdit, setOpenEdit] = useState(false);
+
+  const isOpenEdit = (entry)=>{
+      setOpenEdit(true)
+      setEntryData(entry)
+  }
+
+
+  const isCloseEdit = () =>{
+    setOpenEdit(false)
+  }
+
+  // 연락처 단위 조정
+  function formatPhoneNumber(phonenumber) {
+    let formatphonenumber;
+    if(phonenumber.slice(0,2)==="01"){
+      formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,7)}-${phonenumber.slice(7,12)}`
+    }else if(phonenumber.slice(0,2)==="02"){
+      if(phonenumber.length===10){
+        formatphonenumber = `${phonenumber.slice(0,2)}-${phonenumber.slice(2,6)}-${phonenumber.slice(6,11)}`
+      }else if(phonenumber.length===9){
+        formatphonenumber = `${phonenumber.slice(0,2)}-${phonenumber.slice(2,5)}-${phonenumber.slice(5,10)}`
+      }
+    }else{
+      if(phonenumber.length===11){
+        formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,7)}-${phonenumber.slice(7,12)}`
+      }else if(phonenumber.length===10){
+        formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,6)}-${phonenumber.slice(6,11)}`
+      }
+    }
+    return formatphonenumber;
   }
 
   return (
@@ -55,7 +90,7 @@ export default function EntryMain() {
         <div id='entrymain-title'>
           출입 등록 현황({entryList.length})
         </div>
-        <div id='entrymain-button'onClick={() => { toggleEntryRegistration(); setEntryCount(entryCount + 1); }}>
+        <div id='entrymain-button'onClick={() => { openEntryRegistration(); setEntryCount(entryCount + 1); }}>
           <LuPlus/>
         </div>
       </div>
@@ -73,7 +108,7 @@ export default function EntryMain() {
             <div id='entrymain-right'>직위: {entry.position}</div>
           </div>
           <div id='entrymain-list-row'>
-            <div id='entrymain-text'>연락처: {entry.callNumber}</div>
+            <div id='entrymain-text'>연락처: {formatPhoneNumber(entry.callNumber)}</div>
           </div>
           <div id='entrymain-list-row'>
             <div id='entrymain-text'>출입일시: {entry.entryDate} {entry.entryTime}시</div>
@@ -83,13 +118,15 @@ export default function EntryMain() {
           </div>
         </div>
         <div id='entrymain-list-bottom'>
-          <div className='entrymain-list-button entrymain-list-editbutton' fetchList={fetchList}>수정</div>
+          <div className='entrymain-list-button entrymain-list-editbutton' fetchList={fetchList} entry={entry} onClick={()=>isOpenEdit(entry)}>수정</div>
           <div className='entrymain-list-button entrymain-list-deletebutton' onClick={()=>isOpenDelete(entry.id)}>삭제</div>
         </div>
       </div>
       ))}
-      {isOpen && <EntryRegistration  toggleEntryRegistration={toggleEntryRegistration} fetchList={fetchList} entryCount={entryCount}/>}
-      {openDelete ? <DeleteConfirmModal fetchList={fetchList} isCloseDelete={isCloseDelete} deleteId={deleteId}/> : null}
+      {isOpen && <EntryRegistration  openEntryRegistration={openEntryRegistration} fetchList={fetchList} entryCount={entryCount}/>}
+      {openDelete ? <DeleteConfirmModal fetchList={fetchList} isCloseDelete={isCloseDelete} deleteId={entryId}/> : null}
+      {openEdit ? <EntryEdit fetchList={fetchList} isCloseEdit={isCloseEdit} entryData={entryData}/> : null}
+
     </div>
 
   )

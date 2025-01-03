@@ -10,7 +10,7 @@
     left: 10%;
     right: 10%;
     width: 70vw;
-    height: 32vw;
+    height: 35vw;
     border-radius: 2vw;
     display: flex;
     flex-direction: column;
@@ -24,7 +24,7 @@
     align-items: center;
     background-color: #ffffff;
     width: 70vw;
-    height: 20vw;
+    height: 23vw;
     border-top-left-radius: 5vw;
     border-top-right-radius: 5vw;
 }
@@ -44,26 +44,23 @@
     border-bottom-left-radius: 4vw;
     border-bottom-right-radius: 4vw;
     display: flex;
-    border-top: 0.5vw solid rgb(218, 218, 218);
     font-family: 'PretendardMedium';
 }
 #deletemodal-canclebutton{
-    width: 35vw;
+    width: 30vw;
     height: 12vw;
-    background-color: #ffffff;
-    border-right: 0.5vw solid rgb(218, 218, 218);
+    background-color: #f1f1f1;
     border-bottom-left-radius: 4vw;
     text-align: center;
     line-height: 12vw;
-    color: rgb(29, 68, 243);
 }
 #deletemodal-confirmbutton{
-    width: 35vw;
+    width: 40vw;
     height: 12vw;
-    background-color: #ffffff;
+    background-color: #2150b1;
     border-bottom-right-radius: 4vw;
     text-align: center;
     line-height: 12vw;
-    color: rgb(29, 68, 243);
+    color: #ffffff;
 
 }

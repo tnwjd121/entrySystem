@@ -17,7 +17,7 @@ const getCenterPositionFromIndex = (index) => {
   return index * BUTTON_HEIGHT;
 };
 
-export default function TimeModal({timeCount, selectedTime, setSelectedTime, onClose}) {
+export default function TimeModal({typeOfSubmit, timeCount, selectedTime, setSelectedTime, onClose}) {
 
   return (
     <View style={styles.view}>
@@ -28,12 +28,13 @@ export default function TimeModal({timeCount, selectedTime, setSelectedTime, onC
         selectedTime={selectedTime}
         setSelectedTime={setSelectedTime}
         onClose={onClose}
+        typeOfSubmit={typeOfSubmit}
       />
     </View>
   );
 }
 
-const TimePicker = ({ visibleCount, timeCount, setSelectedTime, selectedTime, onClose }) => {
+const TimePicker = ({typeOfSubmit, visibleCount, timeCount, setSelectedTime, selectedTime, onClose }) => {
 
   const options = {
     hour: '2-digit',
@@ -70,9 +71,13 @@ const TimePicker = ({ visibleCount, timeCount, setSelectedTime, selectedTime, on
 
   //오늘 날짜 보여주기
   useEffect(()=>{
-    if(timeCount==1) {
-      scrollToToday()
-    }else if(timeCount > 1){
+    if(typeOfSubmit==="add"){
+      if(timeCount==1) {
+        scrollToToday()
+      }else if(timeCount > 1){
+        scrollToSelect()
+      }
+    }else{
       scrollToSelect()
     }
   }, [timeCount])

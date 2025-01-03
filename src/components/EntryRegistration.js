@@ -9,14 +9,8 @@ import { IoMdTime } from "react-icons/io";
 import TimeModal from './TimeModal';
 import { FaPlus } from "react-icons/fa6";
 
-export default function EntryRegistration({ toggleEntryRegistration, fetchList, entryCount }) {
+export default function EntryRegistration({ openEntryRegistration, fetchList, entryCount }) {
     const API_URL = "http://localhost:5000"
-
-    // 작성 필요
-    // 1. 신청 완료페이지, 오류페이지, 관리자 문의 페이지 만들기
-
-    // 2. 선택 안 했는데 0-00-00으로 선택되어있음
-
 
     const location = useLocation();
     const { verificationData } = location.state || {};
@@ -31,7 +25,6 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
         purpose: "",
         callNumber: "",
         createdDate: ""
-
     };
 
 
@@ -40,6 +33,7 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
     const [prevData, setPrevData] = useState("");
     const [dateCount, setDateCount] = useState(0);
     const [timeCount, setTimeCount] = useState(0);
+    const [typeOfSubmit, setTypeOfSubmit] = useState("");
 
 
     // verificationData를 초기화
@@ -57,6 +51,7 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
             })
             fetchPreviousEntryData();
         }
+        setTypeOfSubmit("add")
 
     }, []);
 
@@ -81,6 +76,7 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
         setSelectedYear(year);
         setSelectedMonth(month);
         setSelectedDay(day);
+        setTypeOfSubmit("prev")
 
     }
 
@@ -133,7 +129,7 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
     };
 
     const handleClose = () => {
-        toggleEntryRegistration(); // 부모 컴포넌트에서 닫기 처리
+        openEntryRegistration(); // 부모 컴포넌트에서 닫기 처리
         setVerificationState(null); // verificationState 초기화
         console.log(verificationState)
     };
@@ -188,6 +184,20 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
         )
     }
 
+    function numberMax(e) {
+        if (e.target.value.length > e.target.maxLength) {
+          e.target.value = e.target.value.slice(0, e.target.maxLength)
+        }
+      }
+      function numberCheck(e) {
+        e.target.value = e.target.value.replace(/[^0-9]/g, "");
+      }
+    
+      function handleInput(e) {
+        numberCheck(e)
+        numberMax(e)
+      }
+
     return (
         <div id='entryregistration-body'>
             <div id='entryregistration-top'>
@@ -227,7 +237,9 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
                 <div id='entryregistration-input-callNumber'>
                     <label>
                         <span id='entryregistration-input-title'>연락처</span><br />
-                        <input type='number' id='callNumber' placeholder='연락처 (숫자만)' onChange={handleChange} value={entryregistrationData.callNumber} />
+                        <input 
+                        onInput={handleInput}
+                        type='number' id='callNumber' placeholder='연락처 (숫자만)' onChange={handleChange} maxLength={11} value={entryregistrationData.callNumber} />
                     </label>
                 </div>
                 <div id='entryregistration-input-entrydate'>
@@ -259,6 +271,7 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
                                     selectedDay={selectedDay}
                                     setSelectedDay={setSelectedDay}
                                     onClose={dateCloseModal}
+                                    typeOfSubmit={typeOfSubmit}
                                 />
                                 :
                                 null}
@@ -274,6 +287,7 @@ export default function EntryRegistration({ toggleEntryRegistration, fetchList, 
                                     selectedTime={selectedTime}
                                     setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
                                     onClose={timeCloseModal}
+                                    typeOfSubmit={typeOfSubmit}
                                 />
                                 :
                                 null}

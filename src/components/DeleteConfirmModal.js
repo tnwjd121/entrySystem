@@ -6,8 +6,6 @@ export default function DeleteConfirmModal({isCloseDelete,deleteId, fetchList}) 
 
     const DELETE_URL = 'http://localhost:5000/entrylist/'
 
-    // 삭제하고 새로고침 해야함
-
     const deleteSubmit = async(deleteId) => {
         try {
             const response = await axios.delete(`${DELETE_URL}${deleteId}`)

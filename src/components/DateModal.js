@@ -8,7 +8,7 @@ import { debounce } from 'lodash';
 
 
 const currentYear = new Date().getFullYear();
-const years = Array.from({ length: 20 }, (_, i) => currentYear + i);
+const years = Array.from({ length: 20 }, (_, i) => (currentYear-1) + i);
 const months = Array.from({ length: 12 }, (_, i) => i + 1);
 const BUTTON_HEIGHT = window.innerHeight * 0.065;
 const VIEW_HEIGHT = BUTTON_HEIGHT * 3;
@@ -20,7 +20,7 @@ const getCenterPositionFromIndex = (index) =>  {
   return index * BUTTON_HEIGHT;
 };
 
-export default function DateModal({onClose,dateCount,selectedYear,setSelectedYear,selectedMonth,setSelectedMonth,selectedDay,setSelectedDay}) {
+export default function DateModal({typeOfSubmit,onClose,dateCount,selectedYear,setSelectedYear,selectedMonth,setSelectedMonth,selectedDay,setSelectedDay}) {
 
   return (
     <View style={styles.view}>
@@ -35,6 +35,7 @@ export default function DateModal({onClose,dateCount,selectedYear,setSelectedYea
         setSelectedMonth={setSelectedMonth}
         selectedDay={selectedDay}
         setSelectedDay={setSelectedDay}
+        typeOfSubmit={typeOfSubmit}
       />
     </View>
   );
@@ -42,7 +43,7 @@ export default function DateModal({onClose,dateCount,selectedYear,setSelectedYea
 
 
 
-const DatePicker = ({dateCount, visibleCount, onClose, selectedYear,setSelectedYear, selectedMonth, setSelectedMonth, selectedDay, setSelectedDay }) => {
+const DatePicker = ({typeOfSubmit, dateCount, visibleCount, onClose, selectedYear,setSelectedYear, selectedMonth, setSelectedMonth, selectedDay, setSelectedDay }) => {
 
   // 데이터 저장
   const [days, setDays] = useState(Array.from({ length: 31 }, (_, i) => i + 1));
@@ -105,17 +106,21 @@ const DatePicker = ({dateCount, visibleCount, onClose, selectedYear,setSelectedY
   };
 
   useEffect(()=>{
-    if(dateCount==1) {
-      scrollToToday()
-
-    // 상태 초기화 (오늘 날짜로 설정)
-    setSelectedYear(currentYear);
-    setSelectedMonth(currentMonth);
-    setSelectedDay(currentDay);
-
-    }else if(dateCount > 1){
+    if(typeOfSubmit==="add"){
+      if(dateCount==1) {
+        scrollToToday()
+      // 상태 초기화 (오늘 날짜로 설정)
+      setSelectedYear(currentYear);
+      setSelectedMonth(currentMonth);
+      setSelectedDay(currentDay);
+  
+      }else if(dateCount > 1){
+        scrollToSelect()
+      }
+    }else{
       scrollToSelect()
     }
+
   },[dateCount])
 
   useEffect(() => {
