@@ -9,7 +9,7 @@ import { IoMdTime } from "react-icons/io";
 import TimeModal from './TimeModal';
 import { FaPlus } from "react-icons/fa6";
 
-export default function EntryRegistration({ openEntryRegistration, fetchList, entryCount }) {
+export default function EntryRegistration({ openEntryRegistration, fetchList }) {
     const API_URL = "http://localhost:5000"
 
     const location = useLocation();
@@ -24,61 +24,15 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
         entryTime: "",
         purpose: "",
         callNumber: "",
-        createdDate: ""
+        createdDate: "",
+        keyCallNumber:verificationData?.callNumber
     };
 
 
     const [entryregistrationData, setEntryregistrationData] = useState(initialState);
     const [verificationState, setVerificationState] = useState(verificationData);
-    const [prevData, setPrevData] = useState("");
     const [dateCount, setDateCount] = useState(0);
     const [timeCount, setTimeCount] = useState(0);
-    const [typeOfSubmit, setTypeOfSubmit] = useState("");
-
-
-    // verificationData를 초기화
-    useEffect(() => {
-        console.log(entryCount)
-        if (entryCount == 1) {
-            setEntryregistrationData({
-                ...initialState,
-                name: verificationState?.name || "",
-                callNumber: verificationState?.callNumber || "",
-            });
-        } else if (entryCount > 1) {
-            setEntryregistrationData({
-                ...initialState
-            })
-            fetchPreviousEntryData();
-        }
-        setTypeOfSubmit("add")
-
-    }, []);
-
-    // 출입일시
-    const prevButton = () => {
-        setEntryregistrationData({
-            ...initialState,
-            entryDate: prevData?.entryDate || "",
-            entryTime: prevData?.entryTime || "",
-            purpose: prevData?.purpose || "",
-        })
-        setSelectedTime(prevData?.entryTime)
-
-        const date = prevData?.entryDate;
-        const [yearStr, monthStr, dayStr] = date.split('-');
-        // => string이 아니라 number로 지정
-
-        const year = Number(yearStr);
-        const month = Number(monthStr);
-        const day = Number(dayStr);
-        
-        setSelectedYear(year);
-        setSelectedMonth(month);
-        setSelectedDay(day);
-        setTypeOfSubmit("prev")
-
-    }
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -88,27 +42,13 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
         }));
     };
 
-    const fetchPreviousEntryData = async () => {
-        try {
-            const response = await axios.get(`${API_URL}/entrylist`);
-            const latestEntry = response.data.reduce((latest, current) => {
-                return new Date(latest.createdDate) > new Date(current.createdDate) ? latest : current;
-            });
-            setPrevData(latestEntry)
-        } catch (error) {
-            console.error("이전 데이터 가져오기 에러:", error);
-        }
-    };
-
-
-
-
     const addSubmit = async () => {
         if (isFormComplete()) {
             const currentDate = new Date().toISOString();
             const dataToSubmit = {
                 ...entryregistrationData,
-                createdDate: currentDate
+                createdDate: currentDate,
+                keyCallNumber: verificationData?.callNumber,
             };
             try {
                 // 서버로 데이터 전송
@@ -178,7 +118,7 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
 
 
     const isFormComplete = () => {
-        const fields = ["clientName", "partnerCompany", "name", "position", "entryDate", "entryTime", "purpose", "callNumber"];
+        const fields = ["partnerCompany", "name", "position", "entryDate", "entryTime", "purpose", "callNumber"];
         return (
             fields.every((field) => entryregistrationData[field])
         )
@@ -210,28 +150,22 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
             </div>
             <hr />
             <div id='entryregistration-input'>
-                <div id='entryregistration-input-clientname'>
-                    <label>
-                        <span id='entryregistration-input-title'>고객사명</span><br />
-                        <input type='text' id='clientName' placeholder='고객사명' onChange={handleChange} value={entryregistrationData.clientName} />
-                    </label>
-                </div>
                 <div id='entryregistration-input-partnercompany'>
                     <label>
                         <span id='entryregistration-input-title'>협력업체</span><br />
                         <input type='text' id='partnerCompany' placeholder='협력업체' onChange={handleChange} value={entryregistrationData.partnerCompany} />
                     </label>
                 </div>
-                <div id='entryregistration-input-name'>
-                    <label>
-                        <span id='entryregistration-input-title'>성명</span><br />
-                        <input type='text' id='name' placeholder='성명' onChange={handleChange} value={entryregistrationData.name} />
-                    </label>
-                </div>
                 <div id='entryregistration-input-position'>
                     <label>
                         <span id='entryregistration-input-title'>직위</span><br />
                         <input type='text' id='position' placeholder='직위' onChange={handleChange} value={entryregistrationData.position} />
+                    </label>
+                </div>
+                <div id='entryregistration-input-name'>
+                    <label>
+                        <span id='entryregistration-input-title'>성명</span><br />
+                        <input type='text' id='name' placeholder='성명' onChange={handleChange} value={entryregistrationData.name} />
                     </label>
                 </div>
                 <div id='entryregistration-input-callNumber'>
@@ -243,7 +177,7 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
                     </label>
                 </div>
                 <div id='entryregistration-input-entrydate'>
-                    {entryCount > 1 ?
+                    {/* {entryCount > 1 ?
                         (
                             <div id='entryregistration-prevButton' onClick={prevButton}>
                                 <div id='entryregistration-prevButton-icon'><FaPlus /></div>
@@ -252,7 +186,7 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
                         )
                         :
                         null
-                    }
+                    } */}
                     <label>
                         <span id='entryregistration-input-title'>출입일시</span><br />
                         <div id='entryregistration-input-entryday-flex'>
@@ -271,7 +205,6 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
                                     selectedDay={selectedDay}
                                     setSelectedDay={setSelectedDay}
                                     onClose={dateCloseModal}
-                                    typeOfSubmit={typeOfSubmit}
                                 />
                                 :
                                 null}
@@ -287,7 +220,6 @@ export default function EntryRegistration({ openEntryRegistration, fetchList, en
                                     selectedTime={selectedTime}
                                     setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
                                     onClose={timeCloseModal}
-                                    typeOfSubmit={typeOfSubmit}
                                 />
                                 :
                                 null}

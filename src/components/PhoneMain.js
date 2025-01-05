@@ -7,9 +7,10 @@ import { FaCheckCircle } from "react-icons/fa";
 import CarrierModal from './CarrierModal';
 import { useNavigate } from 'react-router-dom';
 import FailedAuthentication from './FailedAuthentication';
+import axios from 'axios';
 
 export default function PhoneMain() {
-  // 본인인증
+    const API_URL = "http://localhost:5000"
 
   const [openCarrierModal, setOpenCarrierModal] = useState(false);
   const [verificationData, setVerificationData] = useState({
@@ -65,9 +66,16 @@ export default function PhoneMain() {
     );
   };
 
-  const authenticationSubmit = () => {
+  const authenticationSubmit = async() => {
     if (isFormComplete()) {
-      navigate('/ibk/entry/certification', { state: { verificationData } });
+      try {
+
+        await axios.post(`${API_URL}/users`, verificationData);
+
+        navigate('/ibk/entry/certification', { state: { verificationData } });
+      } catch (error) {
+        console.error("에러 발생", error)
+      }
     }
   };
 

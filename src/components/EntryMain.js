@@ -24,8 +24,6 @@ export default function EntryMain() {
   useEffect(()=>{
     fetchList()
   }, [])
-  
-  const [entryCount, setEntryCount] = useState(0); 
 
   const fetchList =  async () => {
     try {
@@ -90,7 +88,7 @@ export default function EntryMain() {
         <div id='entrymain-title'>
           출입 등록 현황({entryList.length})
         </div>
-        <div id='entrymain-button'onClick={() => { openEntryRegistration(); setEntryCount(entryCount + 1); }}>
+        <div id='entrymain-button'onClick={openEntryRegistration}>
           <LuPlus/>
         </div>
       </div>
@@ -123,7 +121,7 @@ export default function EntryMain() {
         </div>
       </div>
       ))}
-      {isOpen && <EntryRegistration  openEntryRegistration={openEntryRegistration} fetchList={fetchList} entryCount={entryCount}/>}
+      {isOpen && <EntryRegistration  openEntryRegistration={openEntryRegistration} fetchList={fetchList}/>}
       {openDelete ? <DeleteConfirmModal fetchList={fetchList} isCloseDelete={isCloseDelete} deleteId={entryId}/> : null}
       {openEdit ? <EntryEdit fetchList={fetchList} isCloseEdit={isCloseEdit} entryData={entryData}/> : null}
 
