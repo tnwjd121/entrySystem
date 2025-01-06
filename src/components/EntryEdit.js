@@ -50,7 +50,6 @@ export default function EntryEdit({ isCloseEdit, entryData, fetchList }) {
         setSelectedYear(year);
         setSelectedMonth(month);
         setSelectedDay(day);
-        setTypeOfSubmit("prev")
     }, []);
 
 
@@ -160,12 +159,6 @@ return (
         </div>
         <hr />
         <div id='entryedit-input'>
-            <div id='entryedit-input-clientname'>
-                <label>
-                    <span id='entryedit-input-title'>고객사명</span><br />
-                    <input type='text' id='clientName' placeholder='고객사명' onChange={handleChange} value={entryeditData.clientName} />
-                </label>
-            </div>
             <div id='entryedit-input-partnercompany'>
                 <label>
                     <span id='entryedit-input-title'>협력업체</span><br />

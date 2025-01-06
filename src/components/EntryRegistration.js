@@ -12,11 +12,11 @@ import { FaPlus } from "react-icons/fa6";
 export default function EntryRegistration({ openEntryRegistration, fetchList }) {
     const API_URL = "http://localhost:5000"
 
+    
     const location = useLocation();
     const { verificationData } = location.state || {};
-
+    
     const initialState = {
-        clientName: "",
         partnerCompany: "",
         name: "",
         position: "",
@@ -27,12 +27,23 @@ export default function EntryRegistration({ openEntryRegistration, fetchList }) 
         createdDate: "",
         keyCallNumber:verificationData?.callNumber
     };
-
-
     const [entryregistrationData, setEntryregistrationData] = useState(initialState);
     const [verificationState, setVerificationState] = useState(verificationData);
     const [dateCount, setDateCount] = useState(0);
     const [timeCount, setTimeCount] = useState(0);
+    
+    useEffect(() => {
+        if (verificationState) {
+            setEntryregistrationData({
+                ...initialState,
+                name: verificationState?.name || "",
+                callNumber: verificationState?.callNumber || "",
+            });
+        }
+    }, [verificationState]);
+
+
+
 
     const handleChange = (e) => {
         const { id, value } = e.target;

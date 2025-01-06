@@ -46,12 +46,33 @@ entrycount 필요 없음
 entryregistration에 설정 완료
 
 수정해야되는거
-1. 문제 date랑 time 조정해야함 현재날짜로 처음 들어갔을때 => 오늘 날짜로 세팅되게 바꾸기
-2. 출입 등록 현황 양식 수정
 3. 출입 현황 인원 추가되는거 작성(이거는 id값으로 추가하거나 아니면 등록할때 티켓번호를 만들어서 하기)
+4. 처음 로그인시 이미 있는 전화번호로 들어왔을경우 새로 추가 x 안되고 해당하는 정보로 들어가기
+5. 날짜, 시간 사이즈 조정 modal 때문에 움직이는 듯 수정 필요
+7. 수정 시 is complete 제대로 작동 안하는 듯
+8. 
 
 
-
+  // 연락처 단위 조정 (전화번호를 제외해서 따로 빼둠)
+  function formatPhoneNumber(phonenumber) {
+    let formatphonenumber;
+    if(phonenumber.slice(0,2)==="01"){
+      formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,7)}-${phonenumber.slice(7,12)}`
+    }else if(phonenumber.slice(0,2)==="02"){
+      if(phonenumber.length===10){
+        formatphonenumber = `${phonenumber.slice(0,2)}-${phonenumber.slice(2,6)}-${phonenumber.slice(6,11)}`
+      }else if(phonenumber.length===9){
+        formatphonenumber = `${phonenumber.slice(0,2)}-${phonenumber.slice(2,5)}-${phonenumber.slice(5,10)}`
+      }
+    }else{
+      if(phonenumber.length===11){
+        formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,7)}-${phonenumber.slice(7,12)}`
+      }else if(phonenumber.length===10){
+        formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,6)}-${phonenumber.slice(6,11)}`
+      }
+    }
+    return formatphonenumber;
+  }
 
 
 

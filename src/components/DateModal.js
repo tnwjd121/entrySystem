@@ -106,21 +106,20 @@ const DatePicker = ({typeOfSubmit, dateCount, visibleCount, onClose, selectedYea
   };
 
   useEffect(()=>{
-    if(typeOfSubmit==="add"){
+    console.log(typeOfSubmit)
+    if(typeOfSubmit="edit"){
+      scrollToSelect()
+    }else{
       if(dateCount==1) {
         scrollToToday()
       // 상태 초기화 (오늘 날짜로 설정)
       setSelectedYear(currentYear);
       setSelectedMonth(currentMonth);
       setSelectedDay(currentDay);
-  
       }else if(dateCount > 1){
         scrollToSelect()
       }
-    }else{
-      scrollToSelect()
     }
-
   },[dateCount])
 
   useEffect(() => {

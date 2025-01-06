@@ -46,9 +46,8 @@
 }
 #entrymain-list-bottom{
     display: flex;
-    flex-direction: row;
     text-align: center;
-    justify-content: center;
+    justify-content: space-between;
 }
 .entrymain-list-button{
     background-color: #6297fa;
@@ -57,8 +56,11 @@
     padding: 1vw 2vw;
     color: white;
     border-radius: 1vw;
-    margin: 0 0.5vw;
+    margin: 2vw 1vw;
 
+}
+.entrymain-list-addpersonnel-button:hover{
+    background-color: #c2c5c9;
 }
 .entrymain-list-editbutton:hover{
     background-color: #c2c5c9;
@@ -66,6 +68,39 @@
 .entrymain-list-deletebutton:hover{
     background-color: #c2c5c9;
 }
-#entrymain-left{
-    margin-right: 2vw;
+.entrymain-list-right{
+    display: flex;
 }
+.entrymain-list-detail{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #6297fa;
+    font-size: 6vw;
+}
+
+#entrymain-detail{
+    width: 80vw;
+    margin: -5vw auto 0;
+    font-family: 'PretendardMedium';
+    font-size: 4vw;
+    border: 0.1vw solid rgb(180, 180, 180);
+    padding: 3vw;
+    border-radius: 2vw;
+    background-color: rgb(238, 236, 236);
+}
+#entrymain-detail-box{
+    width: 65vw;
+    margin: 2vw auto;
+    padding: 3vw;
+    border: 0.1vw solid rgb(180, 180, 180);
+    background-color: #ffffff;
+    border-radius: 2vw;
+}
+#entrymain-detail-delete{
+    display: flex;
+    justify-content: right;
+    height: 3vw;
+    font-size: 4.5vw;
+}
+

@@ -5,6 +5,9 @@ import EntryRegistration from './EntryRegistration';
 import axios from 'axios';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import EntryEdit from './EntryEdit';
+import { FaAngleDown } from "react-icons/fa6";
+import AddPersonnel from './AddPersonnel';
+import { TiMinus } from "react-icons/ti";
 
 
 export default function EntryMain() {
@@ -20,6 +23,9 @@ export default function EntryMain() {
   // 목서버 데이터 가져오기
   const [entryList, setEntryList]= useState([]);
   const [entryData, setEntryData]= useState([]);
+  const [typeOfSubmit, setTypeOfSubmit] = useState("")
+  // 해당하는 id를 클릭하면
+  const [addpersonnelList, setAddpersonnelList] =useState([]);
   
   useEffect(()=>{
     fetchList()
@@ -27,11 +33,25 @@ export default function EntryMain() {
 
   const fetchList =  async () => {
     try {
-      const response = await axios.get(`${API_URL}/entrylist`)
-      setEntryList(response.data)
+      const entrylist = await axios.get(`${API_URL}/entrylist`)
+      setEntryList(entrylist.data)
     } catch (error) {
       console.error("에러발생")
     }
+  }
+  
+
+
+  
+  const [openAddpersonnel, setOpenAddpersonnel] = useState(false);
+
+  const isOpenAdd = (entry)=>{
+    setOpenAddpersonnel(true)
+    setEntryData(entry)
+  }
+
+  const isCloseAdd = () =>{
+    setOpenAddpersonnel(false)
   }
 
 
@@ -52,6 +72,7 @@ export default function EntryMain() {
   const isOpenEdit = (entry)=>{
       setOpenEdit(true)
       setEntryData(entry)
+      setTypeOfSubmit("edit")
   }
 
 
@@ -59,26 +80,28 @@ export default function EntryMain() {
     setOpenEdit(false)
   }
 
-  // 연락처 단위 조정
-  function formatPhoneNumber(phonenumber) {
-    let formatphonenumber;
-    if(phonenumber.slice(0,2)==="01"){
-      formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,7)}-${phonenumber.slice(7,12)}`
-    }else if(phonenumber.slice(0,2)==="02"){
-      if(phonenumber.length===10){
-        formatphonenumber = `${phonenumber.slice(0,2)}-${phonenumber.slice(2,6)}-${phonenumber.slice(6,11)}`
-      }else if(phonenumber.length===9){
-        formatphonenumber = `${phonenumber.slice(0,2)}-${phonenumber.slice(2,5)}-${phonenumber.slice(5,10)}`
-      }
-    }else{
-      if(phonenumber.length===11){
-        formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,7)}-${phonenumber.slice(7,12)}`
-      }else if(phonenumber.length===10){
-        formatphonenumber = `${phonenumber.slice(0,3)}-${phonenumber.slice(3,6)}-${phonenumber.slice(6,11)}`
-      }
-    }
-    return formatphonenumber;
+  const [openDetail, setOpenDetail] = useState(false)
+  
+  const [detailId, setDetailId] = useState(null);
+  const clickDetail = (id) =>{
+    setOpenDetail(!openDetail);
+    setDetailId(id)
+    console.log(detailId)
+    addList()
+    // entrylistid가  위에  id랑 동일한거만 가져오기
   }
+
+  const addList = async () => {
+    try {
+      const addpersonnellist = await axios.get(`${API_URL}/addpersonnel`)
+      console.log(addpersonnellist.data)
+
+    } catch (error) {
+      console.error("에러발생")
+    }
+  }
+
+
 
   return (
     <div id='entrymain-body'>
@@ -96,35 +119,51 @@ export default function EntryMain() {
       <div id='entrymain-list' key={entry.id}>
         <div id='entrymain-list-top'>
           <div id='entrymain-list-row'>
-            <div id='entrymain-text'>고객사명: {entry.clientName}</div>
-          </div>
-          <div id='entrymain-list-row'>
-            <div id='entrymain-text'>협력업체: {entry.partnerCompany}</div>
-          </div>
-          <div id='entrymain-list-row'>
-            <div id='entrymain-left'>성명: {entry.name}</div>
-            <div id='entrymain-right'>직위: {entry.position}</div>
-          </div>
-          <div id='entrymain-list-row'>
-            <div id='entrymain-text'>연락처: {formatPhoneNumber(entry.callNumber)}</div>
-          </div>
-          <div id='entrymain-list-row'>
-            <div id='entrymain-text'>출입일시: {entry.entryDate} {entry.entryTime}시</div>
+            <div id='entrymain-text'>출입자: {entry.partnerCompany} {entry.name}</div>
           </div>
           <div id='entrymain-list-row'>
             <div id='entrymain-text'>출입목적: {entry.purpose}</div>
           </div>
+          <div id='entrymain-list-row'>
+            <div id='entrymain-text'>출입일시: {entry.entryDate} {entry.entryTime}시</div>
+          </div>
         </div>
         <div id='entrymain-list-bottom'>
-          <div className='entrymain-list-button entrymain-list-editbutton' fetchList={fetchList} entry={entry} onClick={()=>isOpenEdit(entry)}>수정</div>
-          <div className='entrymain-list-button entrymain-list-deletebutton' onClick={()=>isOpenDelete(entry.id)}>삭제</div>
+          <div className='entrymain-list-left'>
+            <div className='entrymain-list-button entrymain-list-addpersonnel-button' onClick={()=>isOpenAdd(entry)}>인원추가</div>
+          </div>
+          <div className='entrymain-list-right'>
+            <div className='entrymain-list-button entrymain-list-editbutton' fetchList={fetchList} entry={entry} onClick={()=>isOpenEdit(entry)}>수정</div>
+            <div className='entrymain-list-button entrymain-list-deletebutton' onClick={()=>isOpenDelete(entry.id)}>삭제</div>
+            <div className='entrymain-list-detail' onClick={()=>clickDetail(entry.id)}><FaAngleDown /></div>
+          </div>
         </div>
       </div>
       ))}
+      {
+        openDetail?(
+          <div id='entrymain-detail'>
+            <div id='entrymain-detail-box'>
+              <div id='entrymain-detail-delete'>
+                <TiMinus />
+              </div>
+              <div id='entrymain-detail-list'>
+                <div id='entrymain-detail-text'>출입자: css 변경 예정 </div>
+              </div>
+              <div id='entrymain-detail-list'>
+                <div id='entrymain-detail-text'>출입목적:</div>
+              </div>
+              <div id='entrymain-detail-list'>
+                <div id='entrymain-detail-text'>출입일시: </div>
+              </div>
+            </div>
+          </div>
+        ):null
+      }
       {isOpen && <EntryRegistration  openEntryRegistration={openEntryRegistration} fetchList={fetchList}/>}
       {openDelete ? <DeleteConfirmModal fetchList={fetchList} isCloseDelete={isCloseDelete} deleteId={entryId}/> : null}
-      {openEdit ? <EntryEdit fetchList={fetchList} isCloseEdit={isCloseEdit} entryData={entryData}/> : null}
-
+      {openEdit ? <EntryEdit fetchList={fetchList} isCloseEdit={isCloseEdit} entryData={entryData} typeOfSubmit={typeOfSubmit}/> : null}
+      {openAddpersonnel ? <AddPersonnel fetchList={fetchList} isCloseAdd={isCloseAdd} entryData={entryData} typeOfSubmit={typeOfSubmit}/> : null}
     </div>
 
   )

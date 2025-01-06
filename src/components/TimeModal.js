@@ -3,8 +3,6 @@ import { Animated, Button, ScrollView, Text, View, TouchableWithoutFeedback, Sty
 import { GoDash } from "react-icons/go";
 import { debounce } from 'lodash';
 
-// 1. 스크롤 부드럽게 안됨
- 
 
 const times = Array.from({ length: 24 }, (_, i) => i + 1);
 const BUTTON_HEIGHT = window.innerHeight * 0.065;
@@ -71,14 +69,14 @@ const TimePicker = ({typeOfSubmit, visibleCount, timeCount, setSelectedTime, sel
 
   //오늘 날짜 보여주기
   useEffect(()=>{
-    if(typeOfSubmit==="add"){
+    if(typeOfSubmit=="edit"){
+      scrollToSelect()
+    }else{
       if(timeCount==1) {
         scrollToToday()
       }else if(timeCount > 1){
         scrollToSelect()
       }
-    }else{
-      scrollToSelect()
     }
   }, [timeCount])
 
@@ -147,7 +145,6 @@ const TimePicker = ({typeOfSubmit, visibleCount, timeCount, setSelectedTime, sel
   };
 
   const handleConfirm = () => {
-    console.log(selectedTime)
     onClose();
   };
 

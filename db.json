@@ -8,21 +8,56 @@
       "genderText": "female",
       "callNumber": "01075662120",
       "carrier": "LGU+"
+    },
+    {
+      "id": "7535",
+      "name": "홍길동",
+      "birth": "000425",
+      "gender": "4",
+      "genderText": "female",
+      "callNumber": "01012345678",
+      "carrier": "KT"
     }
   ],
   "entrylist": [
     {
-      "id": "a5cf",
-      "clientName": "",
-      "partnerCompany": "다라마바",
+      "id": "493c",
+      "partnerCompany": "ibk저축은행",
       "name": "백수정",
-      "position": "팀원",
-      "entryDate": "2027-02-01",
-      "entryTime": 5,
-      "purpose": "들어가기",
-      "callNumber": "01045485564",
-      "createdDate": "2025-01-05T05:30:32.222Z",
-      "keyCallNumber": "01075662120"
+      "position": "사원",
+      "entryDate": "2025-01-10",
+      "entryTime": 10,
+      "purpose": "출입",
+      "callNumber": "01075662120",
+      "createdDate": "2025-01-06T00:42:20.383Z"
+    }
+  ],
+  "addpersonnel": [
+    {
+      "id": "5ab5",
+      "partnerCompany": "테스트1",
+      "name": "테스트",
+      "position": "테스트1",
+      "entryDate": "2025-01-10",
+      "entryTime": 10,
+      "purpose": "출입",
+      "callNumber": "01054564684",
+      "createdDate": "2025-01-06T05:14:35.068Z",
+      "keyCallNumber": "",
+      "entrylistId": "493c"
+    },
+    {
+      "id": "731f",
+      "partnerCompany": "ibk저축은행",
+      "name": "김자바",
+      "position": "사원",
+      "entryDate": "2025-01-10",
+      "entryTime": 10,
+      "purpose": "출입",
+      "callNumber": "01054765468",
+      "createdDate": "2025-01-06T05:15:12.893Z",
+      "keyCallNumber": "",
+      "entrylistId": "493c"
     }
   ]
 }
