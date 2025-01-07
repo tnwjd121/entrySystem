@@ -9,7 +9,7 @@ import { IoMdTime } from "react-icons/io";
 import TimeModal from './TimeModal';
 import { FaPlus } from "react-icons/fa6";
 
-export default function EntryRegistration({ openEntryRegistration, fetchList }) {
+export default function EntryRegistration({typeOfSubmit, openEntryRegistration, fetchList }) {
     const API_URL = "http://localhost:5000"
 
     
@@ -72,6 +72,7 @@ export default function EntryRegistration({ openEntryRegistration, fetchList }) 
                 console.log(verificationState)
 
                 fetchList();
+                handleClose();
             } catch (error) {
                 console.error("등록 에러 발생:", error);
             }
@@ -82,7 +83,6 @@ export default function EntryRegistration({ openEntryRegistration, fetchList }) 
     const handleClose = () => {
         openEntryRegistration(); // 부모 컴포넌트에서 닫기 처리
         setVerificationState(null); // verificationState 초기화
-        console.log(verificationState)
     };
 
 
@@ -188,16 +188,6 @@ export default function EntryRegistration({ openEntryRegistration, fetchList }) 
                     </label>
                 </div>
                 <div id='entryregistration-input-entrydate'>
-                    {/* {entryCount > 1 ?
-                        (
-                            <div id='entryregistration-prevButton' onClick={prevButton}>
-                                <div id='entryregistration-prevButton-icon'><FaPlus /></div>
-                                <div id='entryregistration-prevButton-text'>이전 출입 일시/목적 불러오기</div>
-                            </div>
-                        )
-                        :
-                        null
-                    } */}
                     <label>
                         <span id='entryregistration-input-title'>출입일시</span><br />
                         <div id='entryregistration-input-entryday-flex'>
@@ -216,6 +206,7 @@ export default function EntryRegistration({ openEntryRegistration, fetchList }) 
                                     selectedDay={selectedDay}
                                     setSelectedDay={setSelectedDay}
                                     onClose={dateCloseModal}
+                                    typeOfSubmit={typeOfSubmit}
                                 />
                                 :
                                 null}
@@ -231,6 +222,7 @@ export default function EntryRegistration({ openEntryRegistration, fetchList }) 
                                     selectedTime={selectedTime}
                                     setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
                                     onClose={timeCloseModal}
+                                    typeOfSubmit={typeOfSubmit}
                                 />
                                 :
                                 null}

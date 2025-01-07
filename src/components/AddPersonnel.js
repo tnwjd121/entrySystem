@@ -6,7 +6,7 @@ import DateModal from './DateModal';
 import TimeModal from './TimeModal';
 import { IoMdTime } from 'react-icons/io';
 
-export default function AddPersonnel({ fetchList, isCloseAdd, entryData }) {
+export default function AddPersonnel({typeOfSubmit, fetchList, isCloseAdd, entryData }) {
     const API_URL = "http://localhost:5000"
 
     // 인원추가 페이지
@@ -29,7 +29,6 @@ export default function AddPersonnel({ fetchList, isCloseAdd, entryData }) {
     const [prevData, setPrevData] = useState("");
     const [dateCount, setDateCount] = useState(0);
     const [timeCount, setTimeCount] = useState(0);
-    const [typeOfSubmit, setTypeOfSubmit] = useState("");
 
 
 
@@ -53,7 +52,6 @@ export default function AddPersonnel({ fetchList, isCloseAdd, entryData }) {
         setSelectedYear(year);
         setSelectedMonth(month);
         setSelectedDay(day);
-        setTypeOfSubmit("prev")
     }
 
     useEffect(() => {
@@ -85,6 +83,7 @@ export default function AddPersonnel({ fetchList, isCloseAdd, entryData }) {
                 setAddPersonnelData(initialState); // 폼 초기화
 
                 fetchList();
+                isCloseAdd();
             } catch (error) {
                 console.error("등록 에러 발생:", error);
             }

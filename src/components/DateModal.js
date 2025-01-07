@@ -106,8 +106,7 @@ const DatePicker = ({typeOfSubmit, dateCount, visibleCount, onClose, selectedYea
   };
 
   useEffect(()=>{
-    console.log(typeOfSubmit)
-    if(typeOfSubmit="edit"){
+    if(typeOfSubmit=="edit"){
       scrollToSelect()
     }else{
       if(dateCount==1) {

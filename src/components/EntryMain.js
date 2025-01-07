@@ -15,15 +15,17 @@ export default function EntryMain() {
   const API_URL = "http://localhost:5000"
 
   const [isOpen, setIsOpen] = useState(false);
+  const [typeOfSubmit, setTypeOfSubmit] = useState("")
   
   const openEntryRegistration = () => {
     setIsOpen(!isOpen); 
+    setTypeOfSubmit("add")
   };
   
   // 목서버 데이터 가져오기
   const [entryList, setEntryList]= useState([]);
   const [entryData, setEntryData]= useState([]);
-  const [typeOfSubmit, setTypeOfSubmit] = useState("")
+  const [joinData, setJoinData] = useState([]);
   // 해당하는 id를 클릭하면
   const [addpersonnelList, setAddpersonnelList] =useState([]);
   
@@ -31,14 +33,37 @@ export default function EntryMain() {
     fetchList()
   }, [])
 
+  // db에서 
   const fetchList =  async () => {
     try {
       const entrylist = await axios.get(`${API_URL}/entrylist`)
+      const addlist = await axios.get(`${API_URL}/addpersonnel`);
       setEntryList(entrylist.data)
+      const el = entrylist.data;
+      const al = addlist.data;
+      
     } catch (error) {
       console.error("에러발생")
     }
   }
+
+  
+
+  // 조인하기
+  // const getJoinedData = (entrylist, addpersonnel) => {
+  //   return entrylist.map((entry) => {
+  //     const personnel = addpersonnel.filter(
+  //       (person) => person.entrylistId === entry.id
+  //     );
+  //     return {
+  //       ...entry,
+  //       personnel, // 관련된 addpersonnel 데이터를 추가
+  //     };
+  //   });
+  // };
+  
+  // // 결과 확인
+  // const joinedData = getJoinedData(entrylist, addpersonnel);
   
 
 
@@ -48,6 +73,7 @@ export default function EntryMain() {
   const isOpenAdd = (entry)=>{
     setOpenAddpersonnel(true)
     setEntryData(entry)
+    setTypeOfSubmit("addP")
   }
 
   const isCloseAdd = () =>{
@@ -73,6 +99,7 @@ export default function EntryMain() {
       setOpenEdit(true)
       setEntryData(entry)
       setTypeOfSubmit("edit")
+      console.log("호출확인")
   }
 
 
@@ -83,26 +110,36 @@ export default function EntryMain() {
   const [openDetail, setOpenDetail] = useState(false)
   
   const [detailId, setDetailId] = useState(null);
+
   const clickDetail = (id) =>{
-    setOpenDetail(!openDetail);
-    setDetailId(id)
-    console.log(detailId)
-    addList()
-    // entrylistid가  위에  id랑 동일한거만 가져오기
+    if(detailId === id) {
+      setOpenDetail(false)
+      setDetailId(null)
+    } else {
+      setOpenDetail(true)
+      setDetailId(id)
+    }
   }
+  useEffect(() => {
+    if (detailId !== null && openDetail) {
+      addList();
+    }
+  }, [detailId, openDetail]);
 
   const addList = async () => {
     try {
-      const addpersonnellist = await axios.get(`${API_URL}/addpersonnel`)
-      console.log(addpersonnellist.data)
-
+      const response = await axios.get(`${API_URL}/addpersonnel`);
+      const allAddList = response.data; 
+  
+      const filterList = allAddList.filter(add => add.entrylistId === detailId);
+      setAddpersonnelList(filterList)
+  
+      console.log("필터링된 데이터:", filterList);
     } catch (error) {
-      console.error("에러발생")
+      console.error("에러발생", error);
     }
-  }
-
-
-
+  };
+  
   return (
     <div id='entrymain-body'>
       <div id='entrymain-top'>
@@ -116,6 +153,7 @@ export default function EntryMain() {
         </div>
       </div>
       {entryList.map((entry) => (
+      <div>
       <div id='entrymain-list' key={entry.id}>
         <div id='entrymain-list-top'>
           <div id='entrymain-list-row'>
@@ -138,29 +176,30 @@ export default function EntryMain() {
             <div className='entrymain-list-detail' onClick={()=>clickDetail(entry.id)}><FaAngleDown /></div>
           </div>
         </div>
+        </div>
+        {openDetail && detailId === entry.id && (
+            <div id='entrymain-detail'>
+                {addpersonnelList.map((add) => (
+                <div id='entrymain-detail-box'>
+                  <div id='entrymain-detail-delete'>
+                    <TiMinus />
+                  </div>
+                  <div id='entrymain-detail-list'>
+                    <div id='entrymain-detail-text'>출입자: {add.partnerCompany} {add.name} </div>
+                  </div>
+                  <div id='entrymain-detail-list'>
+                    <div id='entrymain-detail-text'>출입목적: {add.purpose}</div>
+                  </div>
+                  <div id='entrymain-detail-list'>
+                    <div id='entrymain-detail-text'>출입일시: {add.entryDate} {add.entryTime}시 </div>
+                  </div>
+                </div>
+                ))}
+              </div>
+          )}
       </div>
       ))}
-      {
-        openDetail?(
-          <div id='entrymain-detail'>
-            <div id='entrymain-detail-box'>
-              <div id='entrymain-detail-delete'>
-                <TiMinus />
-              </div>
-              <div id='entrymain-detail-list'>
-                <div id='entrymain-detail-text'>출입자: css 변경 예정 </div>
-              </div>
-              <div id='entrymain-detail-list'>
-                <div id='entrymain-detail-text'>출입목적:</div>
-              </div>
-              <div id='entrymain-detail-list'>
-                <div id='entrymain-detail-text'>출입일시: </div>
-              </div>
-            </div>
-          </div>
-        ):null
-      }
-      {isOpen && <EntryRegistration  openEntryRegistration={openEntryRegistration} fetchList={fetchList}/>}
+      {isOpen && <EntryRegistration  openEntryRegistration={openEntryRegistration} fetchList={fetchList} typeOfSubmit={typeOfSubmit}/>}
       {openDelete ? <DeleteConfirmModal fetchList={fetchList} isCloseDelete={isCloseDelete} deleteId={entryId}/> : null}
       {openEdit ? <EntryEdit fetchList={fetchList} isCloseEdit={isCloseEdit} entryData={entryData} typeOfSubmit={typeOfSubmit}/> : null}
       {openAddpersonnel ? <AddPersonnel fetchList={fetchList} isCloseAdd={isCloseAdd} entryData={entryData} typeOfSubmit={typeOfSubmit}/> : null}

@@ -8,7 +8,7 @@ import { IoMdTime } from "react-icons/io";
 import TimeModal from './TimeModal';
 import { FaPlus } from "react-icons/fa6";
 
-export default function EntryEdit({ isCloseEdit, entryData, fetchList }) {
+export default function EntryEdit({typeOfSubmit, isCloseEdit, entryData, fetchList }) {
 
     const [entryeditData, setentryeditData] = useState({
         id:"",
@@ -24,7 +24,6 @@ export default function EntryEdit({ isCloseEdit, entryData, fetchList }) {
     });
 
     useEffect(() => {
-        setTypeOfSubmit("edit")
         console.log(entryData)
         setentryeditData({
             id:entryData.id,
@@ -52,9 +51,6 @@ export default function EntryEdit({ isCloseEdit, entryData, fetchList }) {
         setSelectedDay(day);
     }, []);
 
-
-
-    const [typeOfSubmit, setTypeOfSubmit] = useState("");
 
     const handleChange = (e) => {
         const { id, value } = e.target;
@@ -127,7 +123,7 @@ useEffect(() => {
 
 
 const isFormComplete = () => {
-    const fields = ["clientName", "partnerCompany", "name", "position", "entryDate", "entryTime", "purpose", "callNumber"];
+    const fields = ["partnerCompany", "name", "position", "entryDate", "entryTime", "purpose", "callNumber"];
     return (
         fields.every((field) => entryeditData[field])
     )
