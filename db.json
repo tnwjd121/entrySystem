@@ -29,7 +29,9 @@
       "entryTime": 10,
       "purpose": "출입",
       "callNumber": "01075662120",
-      "createdDate": "2025-01-06T00:42:20.383Z"
+      "createdDate": "2025-01-06T00:42:20.383Z",
+      "keyCallNumber": "01075662120"
+      
     },
     {
       "id": "f5a2",
@@ -40,7 +42,8 @@
       "entryTime": 13,
       "purpose": "테스트 출입",
       "callNumber": "01075662120",
-      "createdDate": "2025-01-07T04:23:44.758Z"
+      "createdDate": "2025-01-07T04:23:44.758Z",
+      "keyCallNumber": "01075662120"
     },
     {
       "id": "e5fc",
@@ -52,7 +55,7 @@
       "purpose": "테스트 연락처",
       "callNumber": "01011111111",
       "createdDate": "2025-01-07T05:40:05.166Z",
-      "keyCallNumber": "01075465464"
+      "keyCallNumber": "01075662120"
     },
     {
       "id": "2700",

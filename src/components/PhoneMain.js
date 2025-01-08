@@ -66,16 +66,25 @@ export default function PhoneMain() {
     );
   };
 
-  const authenticationSubmit = async() => {
-    if (isFormComplete()) {
-      try {
-
+  const authenticationSubmit = async () => {
+    if (!isFormComplete()) {
+      return; 
+    }
+  
+    try {
+      const response = await axios.get(`${API_URL}/users?callNumber=${verificationData.callNumber}`);
+  
+      if (response.data && response.data.length > 0) {
+        const existingUser = response.data[0];
+  
+        navigate('/ibk/entry/certification', { state: { verificationData: existingUser } });
+      } else {
         await axios.post(`${API_URL}/users`, verificationData);
-
+  
         navigate('/ibk/entry/certification', { state: { verificationData } });
-      } catch (error) {
-        console.error("에러 발생", error)
       }
+    } catch (error) {
+      console.error("에러 발생", error);
     }
   };
 

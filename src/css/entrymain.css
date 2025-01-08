@@ -1,26 +1,28 @@
-#entrymain-top{
+#entrymain-top {
     display: flex;
     align-items: center;
     justify-content: space-around;
     margin-bottom: 7vw;
 }
-#entrymain-null{
+
+#entrymain-null {
     width: 10vw;
 }
 
-#entrymain-title{
+#entrymain-title {
     font-family: 'PretendardMedium';
     text-align: center;
     font-size: 5.5vw;
 }
-#entrymain-button{
-   
+
+#entrymain-button {
+
     font-family: 'PretendardMedium';
     text-align: center;
     font-size: 6vw;
 }
 
-#entrymain-button{
+#entrymain-button {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,7 +31,8 @@
     text-align: right;
     padding-right: 3vw;
 }
-#entrymain-list{
+
+#entrymain-list {
     width: 80vw;
     margin: 5vw auto;
     font-family: 'PretendardMedium';
@@ -38,18 +41,21 @@
     padding: 3vw;
     border-radius: 2vw;
 }
-#entrymain-list-row{
+
+#entrymain-list-row {
     display: flex;
     justify-content: left;
     text-align: left;
     margin: 0.4vw;
 }
-#entrymain-list-bottom{
+
+#entrymain-list-bottom {
     display: flex;
     text-align: center;
     justify-content: space-between;
 }
-.entrymain-list-button{
+
+.entrymain-list-button {
     background-color: #6297fa;
     font-family: 'PretendardMedium';
     font-size: 3.8vw;
@@ -59,19 +65,24 @@
     margin: 2vw 1vw;
 
 }
-.entrymain-list-addpersonnel-button:hover{
+
+.entrymain-list-addpersonnel-button:hover {
     background-color: #c2c5c9;
 }
-.entrymain-list-editbutton:hover{
+
+.entrymain-list-editbutton:hover {
     background-color: #c2c5c9;
 }
-.entrymain-list-deletebutton:hover{
+
+.entrymain-list-deletebutton:hover {
     background-color: #c2c5c9;
 }
-.entrymain-list-right{
+
+.entrymain-list-right {
     display: flex;
 }
-.entrymain-list-detail{
+
+.entrymain-list-detail {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -79,7 +90,7 @@
     font-size: 6vw;
 }
 
-#entrymain-detail{
+#entrymain-detail {
     width: 80vw;
     margin: -5vw auto 0;
     font-family: 'PretendardMedium';
@@ -89,7 +100,8 @@
     border-radius: 2vw;
     background-color: rgb(238, 236, 236);
 }
-#entrymain-detail-box{
+
+#entrymain-detail-box {
     width: 65vw;
     margin: 2vw auto;
     padding: 3vw;
@@ -97,10 +109,18 @@
     background-color: #ffffff;
     border-radius: 2vw;
 }
-#entrymain-detail-delete{
+
+#entrymain-detail-delete {
     display: flex;
     justify-content: right;
     height: 3vw;
     font-size: 4.5vw;
 }
 
+.icon-rotate {
+    transform: rotate(180deg);
+}
+
+.icon-normal {
+    transform: rotate(0deg);
+}

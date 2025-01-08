@@ -111,6 +111,8 @@ const TimePicker = ({typeOfSubmit, visibleCount, timeCount, setSelectedTime, sel
     return {
       showsVerticalScrollIndicator: false,
       ref: refs.current[index],
+      bounces: false,
+      decelerationRate: "fast",
       onScrollBeginDrag: () => {
       },
       onScrollEndDrag: (e) => {
@@ -161,7 +163,10 @@ const TimePicker = ({typeOfSubmit, visibleCount, timeCount, setSelectedTime, sel
         </View>
         <View style={styles.view}>
           <View style={[styles.container]}>
-            <ScrollView {...scrollProps[0]}
+            <ScrollView 
+              {...scrollProps[0]}
+              bounces={false}
+              overScrollMode="never"  
               onScroll={(e) => {
                 getOnScrollStop(0)(e);
               }}
@@ -172,7 +177,7 @@ const TimePicker = ({typeOfSubmit, visibleCount, timeCount, setSelectedTime, sel
                 time !== '' ? (
                   <CustomButton
                     key={time}
-                    label={`${time}시`}
+                    label={`${time}`}
                     onPress={getOnPress(0, index)}
                     selected={time !== '' && time === selectedTime}
                   />
