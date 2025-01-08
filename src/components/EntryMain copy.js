@@ -104,10 +104,40 @@ export default function EntryMain() {
     setOpenEdit(false)
   }
 
-  // 수정 필요
   const [openDetail, setOpenDetail] = useState(false)
   
 
+  // 삭제 해도될듯
+  const [detailId, setDetailId] = useState(null);
+
+  const clickDetail = (id) =>{
+    if(detailId === id) {
+      setOpenDetail(false)
+      setDetailId(null)
+    } else {
+      setOpenDetail(true)
+      setDetailId(id)
+    }
+  }
+  useEffect(() => {
+    if (detailId !== null && openDetail) {
+      addList();
+    }
+  }, [detailId, openDetail]);
+
+  const addList = async () => {
+    try {
+      const response = await axios.get(`${API_URL}/addpersonnel`);
+      const allAddList = response.data; 
+  
+      const filterList = allAddList.filter(add => add.entrylistId === detailId);
+      setAddpersonnelList(filterList)
+  
+      console.log("필터링된 데이터:", filterList);
+    } catch (error) {
+      console.error("에러발생", error);
+    }
+  };
   
   return (
     <div id='entrymain-body'>
@@ -121,7 +151,7 @@ export default function EntryMain() {
           <LuPlus/>
         </div>
       </div>
-      {joinData.map((entry) => (
+      {entryList.map((entry) => (
       <div>
       <div id='entrymain-list' key={entry.id}>
         <div id='entrymain-list-top'>
@@ -142,28 +172,30 @@ export default function EntryMain() {
           <div className='entrymain-list-right'>
             <div className='entrymain-list-button entrymain-list-editbutton' fetchList={fetchList} entry={entry} onClick={()=>isOpenEdit(entry)}>수정</div>
             <div className='entrymain-list-button entrymain-list-deletebutton' onClick={()=>isOpenDelete(entry.id)}>삭제</div>
-            <div className='entrymain-list-detail'><FaAngleDown /></div>
+            <div className='entrymain-list-detail' onClick={()=>clickDetail(entry.id)}><FaAngleDown /></div>
           </div>
         </div>
         </div>
-        {openDetail?(
+        {openDetail && detailId === entry.id && (
             <div id='entrymain-detail'>
+                {addpersonnelList.map((add) => (
                 <div id='entrymain-detail-box'>
                   <div id='entrymain-detail-delete'>
                     <TiMinus />
                   </div>
                   <div id='entrymain-detail-list'>
-                    <div id='entrymain-detail-text'>출입자: {entry.personnel.partnerCompany} {entry.personnel.name} </div>
+                    <div id='entrymain-detail-text'>출입자: {add.partnerCompany} {add.name} </div>
                   </div>
                   <div id='entrymain-detail-list'>
-                    <div id='entrymain-detail-text'>출입목적: {entry.personnel.purpose}</div>
+                    <div id='entrymain-detail-text'>출입목적: {add.purpose}</div>
                   </div>
                   <div id='entrymain-detail-list'>
-                    <div id='entrymain-detail-text'>출입일시: {entry.personnel.entryDate} {entry.personnel.entryTime}시 </div>
+                    <div id='entrymain-detail-text'>출입일시: {add.entryDate} {add.entryTime}시 </div>
                   </div>
                 </div>
+                ))}
               </div>
-          ): null}
+          )}
       </div>
       ))}
       {isOpen && <EntryRegistration  openEntryRegistration={openEntryRegistration} fetchList={fetchList} typeOfSubmit={typeOfSubmit}/>}

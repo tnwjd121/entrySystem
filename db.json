@@ -17,24 +17,6 @@
       "genderText": "female",
       "callNumber": "01012345678",
       "carrier": "KT"
-    },
-    {
-      "id": "d79b",
-      "name": "백수정",
-      "birth": "000721",
-      "gender": "4",
-      "genderText": "female",
-      "callNumber": "01075662120",
-      "carrier": "LGU+"
-    },
-    {
-      "id": "0ea7",
-      "name": "백수정",
-      "birth": "000721",
-      "gender": "4",
-      "genderText": "female",
-      "callNumber": "01075465464",
-      "carrier": "KT"
     }
   ],
   "entrylist": [
@@ -137,6 +119,19 @@
       "createdDate": "2025-01-07T05:43:21.030Z",
       "keyCallNumber": "",
       "entrylistId": "493c"
+    },
+    {
+      "id": "35f5",
+      "partnerCompany": "라마바",
+      "name": "백수정",
+      "position": "사원",
+      "entryDate": "2025-02-01",
+      "entryTime": 13,
+      "purpose": "테스트 출입",
+      "callNumber": "01054654646",
+      "createdDate": "2025-01-08T05:43:48.774Z",
+      "keyCallNumber": "",
+      "entrylistId": "f5a2"
     }
   ]
 }
