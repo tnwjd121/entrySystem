@@ -157,6 +157,7 @@ const TimePicker = ({typeOfSubmit, visibleCount, timeCount, setSelectedTime, sel
       <View style={styles.body}>
         <View style={styles.dash}>
           <GoDash style={styles.dashsize} />
+          —
         </View>
         <View >
           <Text style={styles.title}>출입시간</Text>
@@ -262,7 +263,7 @@ const styles = StyleSheet.create({
     left: '5%',
     bottom: '5%',
     backgroundColor: '#2150b2',
-    zIndex: '1000'
+    zIndex: '2'
   },
   buttontext: {
     fontFamily: 'PretendardMedium',
@@ -273,13 +274,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: '20vw',
     height: '5vw',
     color: '#e5e7eb',
-    marginTop: '1vw'
+    marginTop: '1vw',
+    fontSize: '20vw'
   },
   dashsize: {
     fontSize: '20vw',
+
   },
   view: {
     flex: 1,
@@ -303,6 +305,7 @@ const styles = StyleSheet.create({
     height: BUTTON_HEIGHT,
     alignItems: 'center',
     justifyContent: 'center',
+
   },
   buttonLabel: {
     fontWeight: 'bold',

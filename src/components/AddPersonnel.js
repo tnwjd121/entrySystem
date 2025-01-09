@@ -5,8 +5,9 @@ import { FaPlus, FaRegCalendar } from 'react-icons/fa6';
 import DateModal from './DateModal';
 import TimeModal from './TimeModal';
 import { IoMdTime } from 'react-icons/io';
+import '../css/addpersonnel.css'
 
-export default function AddPersonnel({typeOfSubmit, fetchList, isCloseAdd, entryData }) {
+export default function AddPersonnel({ typeOfSubmit, fetchList, isCloseAdd, entryData }) {
     const API_URL = "http://localhost:5000"
 
     // 인원추가 페이지
@@ -21,7 +22,6 @@ export default function AddPersonnel({typeOfSubmit, fetchList, isCloseAdd, entry
         purpose: "",
         callNumber: "",
         createdDate: "",
-        keyCallNumber: "",
         entrylistId: ""
     };
 
@@ -160,105 +160,107 @@ export default function AddPersonnel({typeOfSubmit, fetchList, isCloseAdd, entry
     }
 
     return (
-        <div id='entryregistration-body'>
-            <div id='entryregistration-top'>
-                <div id='entryregistration-closebutton' onClick={handleClose}>
+        <div id='addpersonnel-body'>
+            <div id='addpersonnel-top'>
+                <div id='addpersonnel-closebutton' onClick={handleClose}>
                     <CgClose />
                 </div>
-                <div id='entryregistration-title'>
+                <div id='addpersonnel-title'>
                     인원 추가
                 </div>
             </div>
             <hr />
-            <div id='entryregistration-input'>
-                <div id='entryregistration-input-partnercompany'>
+            <div id='addpersonnel-input'>
+                <div id='addpersonnel-input-partnercompany'>
                     <label>
-                        <span id='entryregistration-input-title'>협력업체</span><br />
+                        <span id='addpersonnel-input-title'>협력업체</span><br />
                         <input type='text' id='partnerCompany' placeholder='협력업체' onChange={handleChange} value={addPersonnelData.partnerCompany} />
                     </label>
                 </div>
-                <div id='entryregistration-input-position'>
+                <div id='addpersonnel-input-position'>
                     <label>
-                        <span id='entryregistration-input-title'>직위</span><br />
+                        <span id='addpersonnel-input-title'>직위</span><br />
                         <input type='text' id='position' placeholder='직위' onChange={handleChange} value={addPersonnelData.position} />
                     </label>
                 </div>
-                <div id='entryregistration-input-name'>
+                <div id='addpersonnel-input-name'>
                     <label>
-                        <span id='entryregistration-input-title'>성명</span><br />
+                        <span id='addpersonnel-input-title'>성명</span><br />
                         <input type='text' id='name' placeholder='성명' onChange={handleChange} value={addPersonnelData.name} />
                     </label>
                 </div>
-                <div id='entryregistration-input-callNumber'>
+                <div id='addpersonnel-input-callNumber'>
                     <label>
-                        <span id='entryregistration-input-title'>연락처</span><br />
+                        <span id='addpersonnel-input-title'>연락처</span><br />
                         <input
                             onInput={handleInput}
                             type='number' id='callNumber' placeholder='연락처 (숫자만)' onChange={handleChange} maxLength={11} value={addPersonnelData.callNumber} />
                     </label>
                 </div>
-                <div id='entryregistration-input-entrydate'>
-                    <div id='entryregistration-prevButton' onClick={prevButton}>
-                        <div id='entryregistration-prevButton-icon'><FaPlus /></div>
-                        <div id='entryregistration-prevButton-text'>출입 일시/목적 불러오기</div>
+                <div id='addpersonnel-input-entrydate'>
+                    <div id='addpersonnel-prevButton-body'>
+                        <div id='addpersonnel-prevButton' onClick={prevButton}>
+                            <div id='addpersonnel-prevButton-icon'><FaPlus /></div>
+                            <div id='addpersonnel-prevButton-text'>출입 일시/목적 불러오기</div>
+                        </div>
                     </div>
                     <label>
-                        <span id='entryregistration-input-title'>출입일시</span><br />
-                        <div id='entryregistration-input-entryday-flex'>
+                        <span id='addpersonnel-input-title'>출입일시</span><br />
+                        <div id='addpersonnel-input-entryday-flex'>
                             <div id='entryDate' onClick={() => { isOpenDate(); setDateCount(dateCount + 1) }}>
                                 <div>{addPersonnelData.entryDate || "연도-월-일"}</div>
                                 <div><FaRegCalendar /></div>
                             </div>
-                            {openDate
-                                ?
-                                <DateModal
-                                    dateCount={dateCount}
-                                    selectedYear={selectedYear}
-                                    setSelectedYear={setSelectedYear}
-                                    selectedMonth={selectedMonth}
-                                    setSelectedMonth={setSelectedMonth}
-                                    selectedDay={selectedDay}
-                                    setSelectedDay={setSelectedDay}
-                                    onClose={dateCloseModal}
-                                    typeOfSubmit={typeOfSubmit}
-                                />
-                                :
-                                null}
-                            {/* 시간만 나오게 하고, 스크롤 형식  */}
                             <div id='entryTime' onClick={() => { isOpenTime(); setTimeCount(timeCount + 1) }}>
                                 <div>{`${addPersonnelData.entryTime}시 ` || "시간"}</div>
                                 <div><IoMdTime /></div>
                             </div>
-                            {openTime
-                                ?
-                                <TimeModal
-                                    timeCount={timeCount}
-                                    selectedTime={selectedTime}
-                                    setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
-                                    onClose={timeCloseModal}
-                                    typeOfSubmit={typeOfSubmit}
-                                />
-                                :
-                                null}
                         </div>
                     </label>
                 </div>
-                <div id='entryregistration-input-purpose'>
+                <div id='addpersonnel-input-purpose'>
                     <label>
-                        <span id='entryregistration-input-title'>출입목적</span><br />
+                        <span id='addpersonnel-input-title'>출입목적</span><br />
                         <input type='text' id='purpose' placeholder='출입목적' onChange={handleChange} value={addPersonnelData.purpose} />
                     </label>
                 </div>
             </div>
-            <div id='entryregistration-entrybutton'
+            <div id='addpersonnel-entrybutton'
                 onClick={addSubmit}
                 style={{
                     backgroundColor: isFormComplete() ? "#2150b2" : "#bccae8",
                     cursor: isFormComplete() ? "pointer" : "not-allowed",
+                    position: openDate||openTime ? "":"fixed"
                 }}
             >
                 등록
             </div>
+            {openDate
+                ?
+                <DateModal
+                    dateCount={dateCount}
+                    selectedYear={selectedYear}
+                    setSelectedYear={setSelectedYear}
+                    selectedMonth={selectedMonth}
+                    setSelectedMonth={setSelectedMonth}
+                    selectedDay={selectedDay}
+                    setSelectedDay={setSelectedDay}
+                    onClose={dateCloseModal}
+                    typeOfSubmit={typeOfSubmit}
+                />
+                :
+                null}
+            {openTime
+                ?
+                <TimeModal
+                    timeCount={timeCount}
+                    selectedTime={selectedTime}
+                    setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
+                    onClose={timeCloseModal}
+                    typeOfSubmit={typeOfSubmit}
+                />
+                :
+                null}
         </div>
     )
 }

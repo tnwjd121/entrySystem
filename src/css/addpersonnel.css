@@ -1,16 +1,16 @@
-#entryregistration-body{
+#addpersonnel-body{
     position: fixed;
     top: 0;
     background-color: #ffffff;
     width: 100%;
     height: 100%;
 }
-#entryregistration-top{
+#addpersonnel-top{
     display: flex;
     align-items: center;
     height: 14vw;
 }
-#entryregistration-closebutton{
+#addpersonnel-closebutton{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,14 +22,14 @@ hr {
     margin: 0;
 }
 
-#entryregistration-title{
+#addpersonnel-title{
     font-family: 'PretendardMedium';
     text-align: center;
     font-size: 5.5vw;
     /* 옆 상관없이  전체 가운데 정렬 */
     margin-left: 29vw;
 }
-#entryregistration-input{
+#addpersonnel-input{
     padding-top: 5vw;
     width: 80%;
     margin: 0 auto;
@@ -39,7 +39,7 @@ hr {
     height: 140vw;
 }
 
-#entryregistration-input input {
+#addpersonnel-input input {
     border: none;
     border-bottom: 0.3vw solid rgb(172, 172, 172);
     font-family: 'PretendardLight';
@@ -49,11 +49,11 @@ hr {
     font-family: 'PretendardRegular';
 }
 
-#entryregistration-input input:focus {
+#addpersonnel-input input:focus {
     border-bottom: 0.3vw solid #2150b2; 
 }
 
-#entryregistration-input-title{
+#addpersonnel-input-title{
     font-family: 'PretendardLight';
     font-size: 4vw;
 }
@@ -62,13 +62,13 @@ hr {
     width: 80vw;
 }
 
-#entryregistration-input-entryday-flex{
+#addpersonnel-input-entryday-flex{
     display: flex;
     width: 80vw;
 
 }
 
-#entryregistration-entrybutton{
+#addpersonnel-entrybutton{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -103,26 +103,32 @@ hr {
     width: 38vw;
     border-bottom: 0.3vw solid rgb(172, 172, 172);
 }
-#entryregistration-prevButton{
+#addpersonnel-prevButton-body{
+    width: 80vw;
+    display: flex;
+    justify-content: right;
+}
+#addpersonnel-prevButton{
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #5c87e4;
-    width: 70vw;
+    width: 47vw;
     color: #ffffff;
     border-radius: 5vw;
     padding: 1vw;
-    margin-left: 10%;
     margin-bottom: 2vw;
 }
-#entryregistration-prevButton-icon{
+#addpersonnel-prevButton-icon{
     display: flex;
     justify-content: center;
     align-items: center;
     margin-right: 1vw;
 }
-#entryregistration-prevButton-text{
+#addpersonnel-prevButton-text{
     display: flex;
     justify-content: center;
     align-items: center;
+    font-family: 'PretendardLight';
+    font-size: 4vw;
 }

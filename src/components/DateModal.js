@@ -214,6 +214,7 @@ const DatePicker = ({typeOfSubmit, dateCount, visibleCount, onClose, selectedYea
       <View style={styles.body}>
         <View style={styles.dash}>
           <GoDash style={styles.dashsize} />
+          —
         </View>
         <View >
           <Text style={styles.title}>출입날짜</Text>
@@ -374,13 +375,13 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    fontSize: '25vw',
+    fontSize: '20vw',
     height: '5vw',
     color: '#e5e7eb',
     marginTop: '1vw',
   },
   dashsize: {
-    fontSize: '25vw',
+    fontSize: '20vw',
   },
   view: {
     flex: 1,

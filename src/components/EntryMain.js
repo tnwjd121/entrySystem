@@ -9,6 +9,7 @@ import { FaAngleDown } from "react-icons/fa6";
 import AddPersonnel from './AddPersonnel';
 import { TiMinus } from "react-icons/ti";
 import { useLocation } from 'react-router-dom';
+import AddPDeleteConfirmModal from './AddPDeleteConfirmModal';
 
 
 export default function EntryMain() {
@@ -32,15 +33,11 @@ export default function EntryMain() {
   const [entryList, setEntryList] = useState([]);
   const [entryData, setEntryData] = useState([]);
   const [joinData, setJoinData] = useState([]);
-  // 해당하는 id를 클릭하면
-  const [addpersonnelList, setAddpersonnelList] = useState([]);
 
   useEffect(() => {
     fetchList()
-    console.log(joinData.personnel)
   }, [])
 
-  // db에서 
   const fetchList = async () => {
     try {
       const entrylist = await axios.get(`${API_URL}/entrylist`);
@@ -100,6 +97,18 @@ export default function EntryMain() {
     setOpenDelete(false)
   }
 
+  const [openAddPDelete, setOpenAddPDelete] = useState(false);
+  const [entryAddPId, setEntryAddPId] = useState(null);
+
+  const isOpenAddPDelete = (id) => {
+    setOpenAddPDelete(true)
+    setEntryAddPId(id)
+  }
+
+  const isCloseAddPDelete = () => {
+    setOpenAddPDelete(false)
+  }
+
   const [openEdit, setOpenEdit] = useState(false);
 
   const isOpenEdit = (entry) => {
@@ -122,11 +131,6 @@ export default function EntryMain() {
       [id]: !prev[id],
     }));
   };
-
-
-
-
-
   return (
     <div id='entrymain-body'>
       <div id='entrymain-top'>
@@ -172,7 +176,7 @@ export default function EntryMain() {
             <div id='entrymain-detail'>
               {entry.personnel.map((person, index) => (
                 <div id='entrymain-detail-box'>
-                  <div id='entrymain-detail-delete'>
+                  <div id='entrymain-detail-delete' onClick={() => isOpenAddPDelete(person.id)}>
                     <TiMinus />
                   </div>
                   <div id='entrymain-detail-list'>
@@ -194,6 +198,7 @@ export default function EntryMain() {
       {openDelete ? <DeleteConfirmModal fetchList={fetchList} isCloseDelete={isCloseDelete} deleteId={entryId} /> : null}
       {openEdit ? <EntryEdit fetchList={fetchList} isCloseEdit={isCloseEdit} entryData={entryData} typeOfSubmit={typeOfSubmit} /> : null}
       {openAddpersonnel ? <AddPersonnel fetchList={fetchList} isCloseAdd={isCloseAdd} entryData={entryData} typeOfSubmit={typeOfSubmit} /> : null}
+      {openAddPDelete ? <AddPDeleteConfirmModal fetchList={fetchList} isCloseAddPDelete={isCloseAddPDelete} deleteId={entryAddPId} /> : null}
     </div>
 
   )

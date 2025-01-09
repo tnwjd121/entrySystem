@@ -9,13 +9,13 @@ import { IoMdTime } from "react-icons/io";
 import TimeModal from './TimeModal';
 import { FaPlus } from "react-icons/fa6";
 
-export default function EntryRegistration({typeOfSubmit, openEntryRegistration, fetchList }) {
+export default function EntryRegistration({ typeOfSubmit, openEntryRegistration, fetchList }) {
     const API_URL = "http://localhost:5000"
 
-    
+
     const location = useLocation();
     const { verificationData } = location.state || {};
-    
+
     const initialState = {
         partnerCompany: "",
         name: "",
@@ -25,13 +25,13 @@ export default function EntryRegistration({typeOfSubmit, openEntryRegistration, 
         purpose: "",
         callNumber: "",
         createdDate: "",
-        keyCallNumber:verificationData?.callNumber
+        keyCallNumber: verificationData?.callNumber
     };
     const [entryregistrationData, setEntryregistrationData] = useState(initialState);
     const [verificationState, setVerificationState] = useState(verificationData);
     const [dateCount, setDateCount] = useState(0);
     const [timeCount, setTimeCount] = useState(0);
-    
+
     useEffect(() => {
         if (verificationState) {
             setEntryregistrationData({
@@ -137,17 +137,17 @@ export default function EntryRegistration({typeOfSubmit, openEntryRegistration, 
 
     function numberMax(e) {
         if (e.target.value.length > e.target.maxLength) {
-          e.target.value = e.target.value.slice(0, e.target.maxLength)
+            e.target.value = e.target.value.slice(0, e.target.maxLength)
         }
-      }
-      function numberCheck(e) {
+    }
+    function numberCheck(e) {
         e.target.value = e.target.value.replace(/[^0-9]/g, "");
-      }
-    
-      function handleInput(e) {
+    }
+
+    function handleInput(e) {
         numberCheck(e)
         numberMax(e)
-      }
+    }
 
     return (
         <div id='entryregistration-body'>
@@ -182,9 +182,9 @@ export default function EntryRegistration({typeOfSubmit, openEntryRegistration, 
                 <div id='entryregistration-input-callNumber'>
                     <label>
                         <span id='entryregistration-input-title'>연락처</span><br />
-                        <input 
-                        onInput={handleInput}
-                        type='number' id='callNumber' placeholder='연락처 (숫자만)' onChange={handleChange} maxLength={11} value={entryregistrationData.callNumber} />
+                        <input
+                            onInput={handleInput}
+                            type='number' id='callNumber' placeholder='연락처 (숫자만)' onChange={handleChange} maxLength={11} value={entryregistrationData.callNumber} />
                     </label>
                 </div>
                 <div id='entryregistration-input-entrydate'>
@@ -195,37 +195,10 @@ export default function EntryRegistration({typeOfSubmit, openEntryRegistration, 
                                 <div>{entryregistrationData.entryDate || "연도-월-일"}</div>
                                 <div><FaRegCalendar /></div>
                             </div>
-                            {openDate
-                                ?
-                                <DateModal
-                                    dateCount={dateCount}
-                                    selectedYear={selectedYear}
-                                    setSelectedYear={setSelectedYear}
-                                    selectedMonth={selectedMonth}
-                                    setSelectedMonth={setSelectedMonth}
-                                    selectedDay={selectedDay}
-                                    setSelectedDay={setSelectedDay}
-                                    onClose={dateCloseModal}
-                                    typeOfSubmit={typeOfSubmit}
-                                />
-                                :
-                                null}
-                            {/* 시간만 나오게 하고, 스크롤 형식  */}
                             <div id='entryTime' onClick={() => { isOpenTime(); setTimeCount(timeCount + 1) }}>
                                 <div>{`${entryregistrationData.entryTime}시 ` || "시간"}</div>
                                 <div><IoMdTime /></div>
                             </div>
-                            {openTime
-                                ?
-                                <TimeModal
-                                    timeCount={timeCount}
-                                    selectedTime={selectedTime}
-                                    setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
-                                    onClose={timeCloseModal}
-                                    typeOfSubmit={typeOfSubmit}
-                                />
-                                :
-                                null}
                         </div>
                     </label>
                 </div>
@@ -241,10 +214,37 @@ export default function EntryRegistration({typeOfSubmit, openEntryRegistration, 
                 style={{
                     backgroundColor: isFormComplete() ? "#2150b2" : "#bccae8",
                     cursor: isFormComplete() ? "pointer" : "not-allowed",
+                    position: openDate||openTime ? "":"fixed"
                 }}
             >
                 등록
             </div>
+            {openDate
+                ?
+                <DateModal
+                    dateCount={dateCount}
+                    selectedYear={selectedYear}
+                    setSelectedYear={setSelectedYear}
+                    selectedMonth={selectedMonth}
+                    setSelectedMonth={setSelectedMonth}
+                    selectedDay={selectedDay}
+                    setSelectedDay={setSelectedDay}
+                    onClose={dateCloseModal}
+                    typeOfSubmit={typeOfSubmit}
+                />
+                :
+                null}
+            {openTime
+                ?
+                <TimeModal
+                    timeCount={timeCount}
+                    selectedTime={selectedTime}
+                    setSelectedTime={setSelectedTime} // 상태 업데이트 함수 전달
+                    onClose={timeCloseModal}
+                    typeOfSubmit={typeOfSubmit}
+                />
+                :
+                null}
         </div>
     )
 }

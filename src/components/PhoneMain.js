@@ -66,6 +66,12 @@ export default function PhoneMain() {
     );
   };
 
+  const [openError, setOpenError] = useState(false);
+
+  const closeError = () => {
+    setOpenError(false)
+  }
+
   const authenticationSubmit = async () => {
     if (!isFormComplete()) {
       return; 
@@ -76,17 +82,18 @@ export default function PhoneMain() {
   
       if (response.data && response.data.length > 0) {
         const existingUser = response.data[0];
-  
         navigate('/ibk/entry/certification', { state: { verificationData: existingUser } });
       } else {
         await axios.post(`${API_URL}/users`, verificationData);
-  
         navigate('/ibk/entry/certification', { state: { verificationData } });
       }
+
     } catch (error) {
       console.error("에러 발생", error);
+      setOpenError(true)
     }
   };
+  
 
   const handleCarrierSelect = (carrierName) => {
     setVerificationData((prev) => ({ ...prev, carrier: carrierName }));
@@ -195,8 +202,7 @@ export default function PhoneMain() {
         ) : null}
       </div>
       <div>
-        {/* 본인인증 안 될 경우 해당 팝업창 이용 */}
-        {/* <FailedAuthentication/> */}
+        {openError?<FailedAuthentication closeError={closeError}/>:null}
       </div>
     </div>
   )
